@@ -5,3 +5,8 @@ require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
 Wf4EverDropboxConnector::Application.load_tasks
+
+require 'single_test' 
+SingleTest.load_tasks
+
+VersionInfo::RakeTasks.install(:class => Wf4EverDropboxConnector)
