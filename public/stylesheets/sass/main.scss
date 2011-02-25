@@ -1,0 +1,608 @@
+@import "partials/variables";
+@import "partials/fonts";
+@import "partials/forms";
+@import "partials/defaults";
+@import "partials/media";
+@import "partials/other_mixins";
+
+@mixin main {
+  @include fonts;
+  @include forms;
+  @include defaults;
+  @include media;
+}
+@include main;
+
+html {
+  background-color: $layout-background-color;
+}
+
+body { 
+  background-color: $layout-background-color;
+  margin: 0;
+  text-align: left;
+  font-family: arial, helvetica, clean, sans-serif;
+  @include font-smoothing;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.5;
+  text-align: center;
+  color: #333333;
+  margin-bottom: 1em;
+}
+
+h1 {
+  @include font-size(20px);
+  color: #000033;
+  margin-bottom: 0.5em;
+}
+
+img, a img {
+  border: none;
+}
+
+.center {
+  text-align: center;
+}
+
+.faded {
+  color: #777;
+}
+
+.faded_plus {
+  color: #999;
+}
+
+.faded_plus_plus {
+  color: #AAA;
+}
+
+.separator_pipe {
+  margin: 0 1em;
+  color: #CCC;
+  font-weight: normal;
+}
+
+.separator_pipe_lean {
+  margin: 0 0.4em;
+  color: #CCC;
+  font-weight: normal;
+}
+
+.count_text {
+  @extend .faded_plus;
+  font-weight: normal;
+}
+
+.step_text {
+  font-weight: bold;
+  margin-top: 2em;
+  color: #660000;
+}
+
+.none_text {
+  @extend .faded;
+  font-weight: normal;
+  font-style: italic;
+}
+
+.error_text {
+  color: red;
+  font-weight: bold;
+}
+
+.extra_text {
+  @extend .faded_plus;
+  font-weight: normal;
+}
+
+.framed {
+  vertical-align: middle;
+  padding: 3px;
+  background-color: #FFF;
+  border: 1px solid #DDD;
+}
+
+#hd {
+  padding: 0;
+}
+
+#bd { }
+
+#ft { 
+  padding: 1em 0;
+}
+
+#main_header {
+  margin: 1em 0;
+  
+  .logo {
+    @include inline-block; 
+    vertical-align: middle;
+    margin-right: 1em;
+    margin-bottom: 0;
+    vertical-align: middle;
+    
+    img {
+      margin: 0;
+      vertical-align: middle;
+    }
+  }
+  
+  .logo2 {
+    @extend .logo;
+    margin-right: 1.5em;
+  }
+  
+  .site_title {
+    @include inline-block; 
+    vertical-align: middle;
+    text-align: left;
+    @include font-size(24px);
+    font-weight: bolder;
+    text-shadow: 1px 1px 6px #BBB;
+    line-height: 1;
+}
+}
+
+#user_nav {
+  float: right;
+  padding: 0;
+  margin: 0;
+  color: #333;
+  @include font-size(11px);
+  background-color: $sidebar-background-color;
+  @include rounded(3px);
+  padding: 5px 6px;
+}
+
+/* BEGIN Site Tabs */
+
+#site_tabs {
+
+  ul {
+    margin: 0;
+    margin-left: 1.5em;
+    font-weight: bold;
+    @include font-size(13px);
+    position: relative;
+    height: 32px;
+    padding-top: 2px;
+    overflow: hidden;
+    
+    li {
+      @include rounded(6px);
+      float: left;
+      margin: 0 0 0 1em;
+      background-color: $layout-background-color;
+      border: solid 1px $main-border-color;
+      position: relative;
+      z-index: 1;
+      @include shadowed();
+      
+      a:link, 
+      a:visited {
+        @include rounded(6px);
+        display: block;
+        text-align: center;
+        height: 36px;
+        line-height: 32px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        color: $content-background-color;
+        outline: none;
+        float: left;
+        /*background: -moz-linear-gradient(top center, #456C94, #2B477D 80%) repeat scroll 0 0 #2B477D;
+        background: -webkit-gradient(linear,left bottom,left top,color-stop(.2, #2B477D),color-stop(.8, #456C94));*/
+        background-color: $tab-background-color;
+        -webkit-transition: background-color 0.3s linear;
+        -moz-transition: background-color 0.3s linear;
+        -o-transition: background-color 0.3s linear;
+        padding: 0 1.5em;
+      }
+      
+      a:hover {
+        background-color: #5a87dd;
+      }
+    }
+    
+    li.active {
+      z-index: 3;
+      
+      a:link, 
+      a:visited {
+        color: $link-color;
+        -webkit-transition: background-color 0.2s linear;
+        background: -moz-linear-gradient(top center, $sidebar-background-color, $content-background-color 20%) repeat scroll 0 0 $content-background-color;
+        background: -webkit-gradient(linear,left bottom,left top,color-stop(.96, $sidebar-background-color),color-stop(.80, $content-background-color));
+        background-color: $content-background-color;
+      }
+    }
+    
+    li.shadow {
+      width: 100%;
+      height: 2px;
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      border: none;
+      background: none;
+      z-index: 2;
+      -webkit-box-shadow: #111 0 -2px 6px;
+      -moz-box-shadow: #111 0 -2px 6px;
+      box-shadow: #111 0 -2px 6px;
+    }
+  }
+
+}
+
+/* END Site Tabs */
+
+#content {
+  min-height: 500px;
+  background: $content-background-color;
+  padding: 1.4em 1.6em;
+  margin: 0;
+  @include rounded(8px);
+  @include shadowed();
+  z-index: 2;
+}
+
+#sidebar {
+  background-color: $sidebar-background-color;
+  min-height: 500px;
+  @include rounded(8px);
+  @include shadowed();
+  
+  .inner {
+    margin: 0.8em 1em;
+    
+    .section {
+      @include font-size(11px);
+      margin: 1.2em 0 0 0;
+      
+      .heading {
+        font-weight: bold;
+        text-align: center;
+        margin: 0 0 0.8em 0;
+      }
+      
+      ul {
+        padding: 0;
+        margin: 0;
+        
+        li {
+          padding: 0;
+          margin: 0 0 0.5em 0;
+          list-style: none; 
+        }
+      }
+    }
+  }
+}
+
+
+/* BEGIN ActiveRecord errors box */
+/* TODO: cleanup!! */
+
+/*.fieldWithErrors {
+  padding: 2px;
+  background-color: #ffaaaa;
+  display: table;
+}*/
+
+.fieldWithErrors label {
+  padding: 2px;
+  background-color: #ffaaaa;
+}
+
+.fieldWithErrors input, .fieldWithErrors select {
+  padding: 2px;
+  background-color: #ffaaaa;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid #ffaaaa;
+  margin: 1.5em 0;
+  background-color: #f5f5f5;
+  padding-bottom: 1em;
+}
+
+#errorExplanation h2 {
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5em;
+  font-size: 93%;
+  margin: 0;
+  background-image: none;
+  background-color: #ffaaaa;
+  border: none;
+}
+
+#errorExplanation p {
+  font-size: 93%;
+  margin-bottom: 0;
+  margin-top: 0.5em;
+  padding: 0.5em;
+}
+
+#errorExplanation ul {
+  padding-left: 2em;
+}
+
+#errorExplanation ul li {
+  font-size: 93%;
+  list-style: square;
+}
+
+/* END ActiveRecord errors box */
+
+
+.buttons {
+  margin: 0.6em 0;
+  text-align: center;
+}
+
+
+/* awesome buttons extensions */
+.awesome.regular {
+  background-color: $tab-background-color !important;
+}
+
+.awesome.blue {
+  background-color: #0A50FF !important;
+}
+.awesome.red {
+  background-color: #e33100 !important;
+}
+.awesome.green {
+  background-color: #3ACC00 !important;
+}
+.awesome.small          { padding: 4px 7px 5px !important; font-size: 10px !important; }
+.awesome.small:active   { padding: 5px 7px 4px !important; }
+.awesome.large          { padding: 8px 14px 9px !important; font-size: 14px !important; }
+.awesome.large:active   { padding: 9px 14px 8px !important; }
+/* end */
+
+
+form.sign_in_main {
+  width: 400px; 
+  margin: 0 auto;
+}
+
+form.sign_up_main {
+  width: 600px; 
+  margin: 0 auto;
+}
+
+
+/* BEGIN listing styles */
+/* TODO: cleanup!! */
+
+.listings {
+  padding: 0;
+  margin: 0;
+}
+
+.listing_item { 
+  margin-bottom: 1.2em;
+  padding: 0.4em 0.8em;
+  border: 1px solid #CCC;
+  background-color: #FFF;
+}
+
+.listing_item .label,
+.listings_table .label {
+  font-size: 123.1%;
+  font-weight: bold;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.listing_item .desc,
+.listings_table .desc {
+  @extend .box_description;
+}
+
+.listing_item .detail,
+.listings_table .detail {
+  color: #333333;
+  font-size: 85%;
+  margin-top: 0.6em;
+}
+
+.listing_item .detail_simple,
+.listings_table .detail_simple {
+  color: #333333;
+  font-size: 93%;
+  margin-top: 0.6em;
+}
+
+.listing_item .detail_simple *,
+.listings_table .detail_simple * {
+  vertical-align: baseline;
+}
+
+.listing_item .extra_detail_box,
+.listings_table .extra_detail_box  {
+  color: #333333;
+  font-size: 85%;
+  margin-top: 1.2em; 
+  padding-top: 0.8em; 
+  border-top: 1px solid #DDD;
+  line-height: 1.5;
+}
+
+.listings_table {
+  border-collapse: separate;
+  border-spacing: 14px;
+  border: none;
+  margin: -14px;
+}
+
+.listings_table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.7em;
+  border: 1px solid #CCC;
+  background-color: #F5F5F5;
+  width: 300px;
+  -moz-box-shadow: 1px 1px 1px #CCC;
+  -webkit-box-shadow: 1px 1px 1px #CCC;
+  box-shadow: 1px 1px 1px #CCC;
+}
+
+.listings_table td * {
+}
+
+.listings_table th {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px;
+  background-color: #DDDDDD;
+  font-weight: bold;
+}
+
+.listings_table td.blank {
+  border: 0px solid #CCC;
+  background-color: transparent;
+  -moz-box-shadow: 0px 0px 0px #CCC;
+  -webkit-box-shadow: 0px 0px 0px #CCC;
+  box-shadow: 0px 0px 0px #CCC;
+}
+
+.listings_table table {
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: none;
+}
+
+.listings_table table td {
+  border: none;
+  padding: 0;
+  -moz-box-shadow: 0px 0px 0px #CCC;
+  -webkit-box-shadow: 0px 0px 0px #CCC;
+  box-shadow: 0px 0px 0px #CCC;
+  width: auto;
+  vertical-align: middle;
+}
+
+/* END listing styles */
+
+
+.box_description {
+  line-height: 1.4;
+  color: #333333;
+  padding: 0.6em 1em; 
+  margin: 1em 0; 
+  background-color: #F3F3F3; 
+  border: 1px dotted #DDD;
+}
+
+.box_info {
+  background: #E9F7CC;
+  color: #333333;
+  padding: 0.6em 1em;
+  margin: 0;
+  margin-bottom: 1em;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.box_info_standout {
+  color: #333333;
+  border: 1px solid #DDD; 
+  background: #FFFFCC; 
+  padding: 0.3em 0.6em; 
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+.box_grouped_info {
+  color: #333333;
+  border: 1px solid #DDD; 
+  background: #F5F5F5; 
+  padding: 0.3em 0.6em; 
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+.box_indented_with_bar {
+  border: 0;
+  border-left: 4px solid #DDD;
+  padding: 1em 0 1em 1em;
+  margin-left: 1em;
+}
+
+.box_currentuser_specific {
+  padding: 1em 1.5em;
+  border: 1px solid #99CCFF;
+  background-color: #EEF6FF;
+}
+
+.box_currentuser_specific * {
+  vertical-align: middle;
+}
+
+
+/* BEGIN content tabs styles */
+
+.tab-container {
+  background-color: #FFF;
+  border: solid 1px #CCC; 
+  height: 600px; 
+  
+  ul { 
+    height: 600px; 
+    list-style: none; 
+    margin: 0; 
+    padding: 0; 
+    background: $content-background-color; 
+    float: left; 
+    border-right: solid 1px #CCC; 
+    
+    li { 
+      width: 100px; 
+      margin: 0; 
+      padding: 0; 
+      text-align: center;
+      
+      a { 
+        display: block; 
+        padding: 15px 0; 
+        outline: none; 
+      }
+      
+      a:hover { 
+        text-decoration: underline; 
+      }
+      
+      a.selected-tab { 
+        font-weight: bold; 
+        text-decoration: none; 
+      }
+    }
+    
+    li.selected-tab { 
+      background: #fff; 
+      position: relative; 
+      left: 1px; 
+      border: 0 solid #CCC; 
+      border-width: 1px 0; 
+    }
+    
+    li:first-child.selected-tab { 
+      border-top: none; 
+    }
+  }
+  
+  .panel-container { 
+    padding: 1em 1.2em 0.7em 120px; 
+    background-color: #FFF;
+  }
+}
+
+/* END content tabs styles */

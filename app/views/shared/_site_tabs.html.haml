@@ -1,0 +1,4 @@
+%nav#main_nav
+  #site_tabs
+    %ul
+      %li{:class => "#{@selected_site_tab == :home ? 'active' : ''}" }= link_to 'Home', root_path

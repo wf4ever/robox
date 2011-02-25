@@ -1,0 +1,31 @@
+@mixin list-item-inline {
+  list-style: none;
+  list-style-image: none;
+  margin: 0;
+  display: inline;
+}
+
+@mixin inline-block {
+  display: -moz-inline-block;
+  display: -moz-inline-box;
+  display: inline-block;
+}
+
+@mixin rounded($size) {
+  border-radius: $size;
+  -moz-border-radius: $size;
+  -webkit-border-radius: $size;
+}
+
+@mixin shadowed($h-offset=1px, $v-offset=-1px, $blur-radius=3px, $colour=#AAA) {
+  -moz-box-shadow: $h-offset $v-offset $blur-radius $colour;
+  -webkit-box-shadow: $h-offset $v-offset $blur-radius $colour;
+  box-shadow: $h-offset $v-offset $blur-radius $colour;
+}
+
+@mixin opacified($amount) {
+  filter:alpha(opacity=$amount*100);
+  -moz-opacity: $amount;
+  -khtml-opacity: $amount;
+  opacity: $amount;
+}

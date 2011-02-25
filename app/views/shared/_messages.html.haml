@@ -1,0 +1,6 @@
+- if flash[:notice]
+  %div#flash_notice{:class => "flasher"}= flash[:notice]
+- if flash[:error] || flash[:failure] || flash[:alert]
+  %div#flash_failure{:class => "flasher"}= flash[:error] || flash[:failure] || flash[:alert]
+- if flash[:success]
+  %div#flash_success{:class => "flasher"}= flash[:success]
