@@ -116,6 +116,7 @@ GEM
       activesupport (~> 3.0)
       haml (~> 3.0)
       railties (~> 3.0)
+    hashie (1.0.0)
     hpricot (0.8.3)
     i18n (0.5.0)
     jammit (0.6.0)
@@ -266,6 +267,7 @@ DEPENDENCIES
   fuubar
   haml (~> 3.0.21)
   haml-rails
+  hashie
   hpricot
   jammit
   jquery-rails (>= 0.2.6)

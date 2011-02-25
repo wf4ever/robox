@@ -1,23 +1,11 @@
 Wf4EverDropboxConnector::Application.routes.draw do
+  #resources :dropbox_accounts
+  
+  match 'authorise' => 'dropbox_accounts#authorise'
+
   root :to => 'home#index'
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   match 'admin' => 'admin/dashboard#index'
-
-  
 
   devise_for :users
   namespace "admin" do

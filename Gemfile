@@ -25,8 +25,9 @@ gem "wirble"
 gem "rails_config"
 gem 'yaml_db', '>= 0.2' 
 gem 'dropbox', '~> 1.2.3'
-gem 'dummy_dropbox'
+gem 'hashie'
 
+gem 'dummy_dropbox', :group => :test
 gem "awesome_print", :group => [:test, :development]
 gem "flutie", "~> 1.1", :group => :development
 gem 'jquery-rails', '>= 0.2.6', :group => :development
