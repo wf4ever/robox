@@ -24,6 +24,8 @@ gem "version_info"
 gem "wirble"
 gem "rails_config"
 gem 'yaml_db', '>= 0.2' 
+gem 'dropbox', '~> 1.2.3'
+gem 'dummy_dropbox'
 
 gem "awesome_print", :group => [:test, :development]
 gem "flutie", "~> 1.1", :group => :development
