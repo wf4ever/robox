@@ -26,7 +26,3 @@ ActiveRecord::Base.transaction do
     user.save!
   end
 end
-
-user1 = User.find_by_email('admin@wf4ever.org')
-user1.role_ids = [1,2]
-user1.save
