@@ -274,16 +274,16 @@ body {
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
   text-align: center;
-  color: #333333;
+  color: #667b99;
   margin-bottom: 1em; }
 
 h1 {
   font-size: 154%;
-  color: #000033;
   margin-bottom: 0.5em; }
 
 img, a img {
-  border: none; }
+  border: none;
+  margin: 0; }
 
 .center {
   text-align: center; }
@@ -312,7 +312,6 @@ img, a img {
 
 .step_text {
   font-weight: bold;
-  margin-top: 2em;
   color: #660000; }
 
 .none_text {
@@ -419,9 +418,9 @@ img, a img {
     border: solid 1px #afbbd2;
     position: relative;
     z-index: 1;
-    -moz-box-shadow: 1px 1px 3px #aaaaaa;
-    -webkit-box-shadow: 1px 1px 3px #aaaaaa;
-    box-shadow: 1px 1px 3px #aaaaaa; }
+    -moz-box-shadow: 1px 1px 3px #cccccc;
+    -webkit-box-shadow: 1px 1px 3px #cccccc;
+    box-shadow: 1px 1px 3px #cccccc; }
     #site_tabs ul li a:link,
     #site_tabs ul li a:visited {
       border-radius: 6px;
@@ -485,9 +484,9 @@ img, a img {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border: 1px solid #afbbd2;
-  -moz-box-shadow: 1px 1px 3px #aaaaaa;
-  -webkit-box-shadow: 1px 1px 3px #aaaaaa;
-  box-shadow: 1px 1px 3px #aaaaaa; }
+  -moz-box-shadow: 1px 1px 3px #cccccc;
+  -webkit-box-shadow: 1px 1px 3px #cccccc;
+  box-shadow: 1px 1px 3px #cccccc; }
   #sidebar .inner {
     margin: 0.8em 1em; }
     #sidebar .inner .section {
@@ -551,6 +550,18 @@ img, a img {
   list-style: square; }
 
 /* END ActiveRecord errors box */
+.getting_started {
+  margin-top: 3em; }
+  .getting_started table td {
+    vertical-align: middle;
+    padding: 10px 8px; }
+    .getting_started table td img {
+      vertical-align: middle; }
+  .getting_started .step_text {
+    font-size: 108%; }
+  .getting_started .status_icon {
+    display: block; }
+
 .buttons {
   margin: 0.6em 0;
   text-align: center; }

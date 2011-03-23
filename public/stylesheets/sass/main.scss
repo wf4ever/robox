@@ -28,18 +28,18 @@ body {
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
   text-align: center;
-  color: #333333;
+  color: $headings-font-color;
   margin-bottom: 1em;
 }
 
 h1 {
   @include font-size(20px);
-  color: #000033;
   margin-bottom: 0.5em;
 }
 
 img, a img {
   border: none;
+  margin: 0;
 }
 
 .center {
@@ -77,7 +77,6 @@ img, a img {
 
 .step_text {
   font-weight: bold;
-  margin-top: 2em;
   color: #660000;
 }
 
@@ -374,6 +373,31 @@ img, a img {
 }
 
 /* END ActiveRecord errors box */
+
+
+.getting_started {
+  margin-top: 3em;
+  
+  table {
+  
+    td {
+      vertical-align: middle;
+      padding: 10px 8px;
+      
+      img {
+        vertical-align: middle;
+      }
+    }
+  }
+  
+  .step_text {
+    @include font-size(14px);
+  }
+
+  .status_icon {
+    display: block;
+  }
+}
 
 
 .buttons {

@@ -17,7 +17,7 @@
   -webkit-border-radius: $size;
 }
 
-@mixin shadowed($h-offset=1px, $v-offset=1px, $blur-radius=3px, $colour=#AAA) {
+@mixin shadowed($h-offset=1px, $v-offset=1px, $blur-radius=3px, $colour=#CCC) {
   -moz-box-shadow: $h-offset $v-offset $blur-radius $colour;
   -webkit-box-shadow: $h-offset $v-offset $blur-radius $colour;
   box-shadow: $h-offset $v-offset $blur-radius $colour;

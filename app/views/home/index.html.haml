@@ -1,6 +1,55 @@
-- title "Home"
-.center
-  - if user_signed_in?
-    &nbsp;
-  - else
-    = button "Sign in or connect your Dropbox account", authorise_path
+- title "Getting Started"
+%h1
+  Manage your Research Objects (ROs)
+%p.center
+  The Wf4Ever ROBox app connects up your Dropbox
+  and synchronises your Research Objects (ROs) with
+  = link_to "dLibra", "http://dlibra.psnc.pl/"
+  blah de blah blah
+.getting_started
+  %h1
+    Getting Started
+  %table
+    %tbody
+      %tr
+        %td
+          - if user_signed_in?
+            = getting_started_status_icon(:done)
+          - else
+            = getting_started_status_icon(:not_done)
+        %td.step_text
+          1. Sign in or connect with your Dropbox account
+        %td.center
+          - unless user_signed_in?
+            = button "Go", authorise_path
+      %tr
+        %td
+          - if user_signed_in?
+            = getting_started_status_icon(:done)
+          - else
+            = getting_started_status_icon(:not_done)
+        %td.step_text
+          2. Specify the ROs folder in your Dropbox
+        %td.center
+          - unless user_signed_in?
+            = button "Go", root_path
+      %tr
+        %td
+          - if user_signed_in?
+            = getting_started_status_icon(:done)
+          - else
+            = getting_started_status_icon(:not_done)
+        %td.step_text
+          3. Wait for the app to sync
+        %td.center
+          - unless user_signed_in?
+            = button "Status", root_path
+      - if user_signed_in?
+        %tr
+          %td
+            = getting_started_status_icon(:done)
+          %td.step_text
+            4. Ready! See your 
+            = link_to "dashboard", ""
+          %td.center
+        
