@@ -1,6 +1,6 @@
 site:
   base_url: "http://localhost:3000"
-  name: "Wf4Ever Dropbox RO Connector"
+  name: "Wf4Ever ROBox"
   main_logo_image: "wf4ever-logo.png"
  
 default_page_size: 20
