@@ -168,7 +168,14 @@ img, a img {
 }
 
 #main_footer {
-  font-weight: bold;
+
+  .copyright_text {
+    font-weight: bold;
+  }
+  
+  .icon_attributions {
+  
+  }
   
   .dropbox_logo {
     float: right;

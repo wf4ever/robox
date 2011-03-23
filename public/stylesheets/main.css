@@ -382,10 +382,10 @@ img, a img {
       font-style: italic;
       line-height: 1; }
 
-#main_footer {
+#main_footer .copyright_text {
   font-weight: bold; }
-  #main_footer .dropbox_logo {
-    float: right; }
+#main_footer .dropbox_logo {
+  float: right; }
 
 #user_nav {
   float: right;
