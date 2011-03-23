@@ -108,7 +108,15 @@ img, a img {
   padding: 0;
 }
 
-#bd { }
+#bd { 
+  min-height: 500px;
+  background: $content-background-color;
+  margin: 0;
+  padding: 6px;
+  @include rounded(6px);
+  z-index: 2;
+  border: 3px solid $main-border-color;
+}
 
 #ft { 
   padding: 1em 0;
@@ -135,15 +143,36 @@ img, a img {
     margin-right: 1.5em;
   }
   
-  .site_title {
+  .title {
     @include inline-block; 
     vertical-align: middle;
     text-align: left;
-    @include font-size(24px);
-    font-weight: bolder;
-    text-shadow: 1px 1px 6px #BBB;
-    line-height: 1;
+    
+    .site_title {
+      vertical-align: middle;
+      @include font-size(24px);
+      font-weight: bolder;
+      text-shadow: 1px 1px 4px #BBB;
+      line-height: 1.8;
+      letter-spacing: 2px;
+    }
+    
+    .sub_title {
+      @include font-size(14px);
+      font-style: italic;
+      line-height: 1;
+    }
+  
+  }
+  
 }
+
+#main_footer {
+  font-weight: bold;
+  
+  .dropbox_logo {
+    float: right;
+  }
 }
 
 #user_nav {
@@ -242,18 +271,17 @@ img, a img {
 
 #content {
   min-height: 500px;
-  background: $content-background-color;
   padding: 1.4em 1.6em;
   margin: 0;
-  @include rounded(8px);
-  @include shadowed();
+  @include rounded(6px);
   z-index: 2;
 }
 
 #sidebar {
   background-color: $sidebar-background-color;
   min-height: 500px;
-  @include rounded(8px);
+  @include rounded(6px);
+  border: 1px solid $main-border-color;
   @include shadowed();
   
   .inner {
