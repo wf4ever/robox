@@ -271,7 +271,7 @@ img, a img {
 
 #content {
   min-height: 500px;
-  padding: 1.4em 1.6em;
+  padding: 1.2em 1.5em;
   margin: 0;
   @include rounded(6px);
   z-index: 2;
@@ -377,7 +377,7 @@ img, a img {
 
 /* awesome buttons extensions */
 .awesome.regular {
-  background-color: $tab-background-color !important;
+  background-color: $button-background-color !important;
 }
 
 .awesome.blue {

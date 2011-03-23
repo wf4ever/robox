@@ -1,1 +1,6 @@
 - title "Home"
+.center
+  - if user_signed_in?
+    &nbsp;
+  - else
+    = button "Login and connect your Dropbox account", authorise_path
