@@ -559,6 +559,8 @@ img, a img {
       vertical-align: middle; }
   .getting_started .step_text {
     font-size: 108%; }
+  .getting_started .not_available {
+    color: #999 !important; }
   .getting_started .status_icon {
     display: block; }
 

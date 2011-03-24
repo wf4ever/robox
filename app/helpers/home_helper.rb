@@ -10,9 +10,12 @@ module HomeHelper
     case status
     when :done
       image_name = "Ok"
-    when :not_done
+    when :pending
       image_name = "Cancel"
       color = :red
+    when :not_available
+      image_name = "Cancel"
+      color = :grey
     end
     
     return image_tag axialis_icon_path(image_name, :color => color, :size => size), 

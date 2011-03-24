@@ -34,5 +34,27 @@ class User < ActiveRecord::Base
       all
     end
   end
+  
+  def dropbox_account_connected?
+    dropbox_accounts.count > 0
+  end
+  
+  def ros_folder_specified?
+    if dropbox_account_connected?
+      # TODO: check that a folder has been specified
+      return true
+    else
+      return false
+    end
+  end
+  
+  def initially_synced?
+    if ros_folder_specified?
+      # TODO: check that an initial sync was established
+      return false
+    else
+      return false
+    end
+  end
 
 end

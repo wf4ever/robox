@@ -5,51 +5,17 @@
   The Wf4Ever ROBox app connects up your Dropbox
   and synchronises your Research Objects (ROs) with
   = link_to "dLibra", "http://dlibra.psnc.pl/"
-  blah de blah blah
 .getting_started
   %h1
     Getting Started
   %table
     %tbody
-      %tr
-        %td
-          - if user_signed_in?
-            = getting_started_status_icon(:done)
-          - else
-            = getting_started_status_icon(:not_done)
-        %td.step_text
-          1. Sign in or connect with your Dropbox account
-        %td.center
-          - unless user_signed_in?
-            = button "Go", authorise_path
-      %tr
-        %td
-          - if user_signed_in?
-            = getting_started_status_icon(:done)
-          - else
-            = getting_started_status_icon(:not_done)
-        %td.step_text
-          2. Specify the ROs folder in your Dropbox
-        %td.center
-          - unless user_signed_in?
-            = button "Go", root_path
-      %tr
-        %td
-          - if user_signed_in?
-            = getting_started_status_icon(:done)
-          - else
-            = getting_started_status_icon(:not_done)
-        %td.step_text
-          3. Wait for the app to sync
-        %td.center
-          - unless user_signed_in?
-            = button "Status", root_path
-      - if user_signed_in?
+      - @wizard_data.steps.each do |step_data|
         %tr
           %td
-            = getting_started_status_icon(:done)
-          %td.step_text
-            4. Ready! See your 
-            = link_to "dashboard", ""
+            = getting_started_status_icon(step_data.status)
+          %td{ :class => "step_text #{step_data.status}" }
+            = step_data.text
           %td.center
-        
+            - if step_data.show_action
+              = button step_data.action_label, step_data.action_path

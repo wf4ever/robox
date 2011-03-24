@@ -393,6 +393,10 @@ img, a img {
   .step_text {
     @include font-size(14px);
   }
+  
+  .not_available {
+    color: #999 !important;
+  }
 
   .status_icon {
     display: block;
