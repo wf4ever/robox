@@ -16,6 +16,7 @@ class DropboxAccount < ActiveRecord::Base
   
   def setup_user!(account_info)
     internal_user = User.find_or_create_by_email(account_info.email, :name => account_info.display_name)
+    internal_user.role_ids = [ Role.find_or_create_by_name('Member').id ]
     internal_user.confirm!
     
     self.user = internal_user
