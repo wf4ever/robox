@@ -1,5 +1,14 @@
 = title "Sign In"
 
+%p.center
+  = button "Sign in with your Dropbox account", connect_path
+
+%p.or
+  OR 
+  
+%p.center
+  Sign in as an admin user below...
+
 = semantic_form_for resource,
                     :as => resource_name, 
                     :url => session_path(resource_name), 

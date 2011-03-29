@@ -12,6 +12,11 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || root_url)
   end
   
+  rescue_from Dropbox::UnsuccessfulResponseError do |exception|
+    flash[:error] = "Failed to access your Dropbox Account. You might need to sign in again."
+    redirect_to(session[:return_to] || root_url)
+  end
+  
   protected
   
   def is_api_request?

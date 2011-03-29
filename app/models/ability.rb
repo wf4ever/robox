@@ -6,6 +6,11 @@ class Ability
  
     if user.role? :admin
       can :manage, :all
+    elsif user.role? :member
+      can :manage, DropboxAccount do |d|
+        d.user == user
+      end
+      
     # elsif user.role? :writter
     #   can :manage, [Post, Asset]
     # elsif user.role? :memeber

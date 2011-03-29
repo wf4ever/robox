@@ -1,13 +1,20 @@
 Wf4EverDropboxConnector::Application.routes.draw do
-  #resources :dropbox_accounts
   
-  match 'authorise' => 'dropbox_accounts#authorise'
+  resources :dropbox_accounts do
+    member do 
+      get :specify_ro_folder
+      post :set_ro_folder
+    end
+  end
+  
+  match 'connect' => 'dropbox_accounts#connect'
 
   root :to => 'home#index'
 
   match 'admin' => 'admin/dashboard#index'
 
   devise_for :users
+  
   namespace "admin" do
     resources :users
   end

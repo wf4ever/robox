@@ -35,14 +35,17 @@ class User < ActiveRecord::Base
     end
   end
   
+  def main_dropbox_account
+    dropbox_accounts.count > 0 ? dropbox_accounts.first : nil
+  end
+  
   def dropbox_account_connected?
-    dropbox_accounts.count > 0
+    !main_dropbox_account.nil?
   end
   
   def ros_folder_specified?
     if dropbox_account_connected?
-      # TODO: check that a folder has been specified
-      return true
+      return !main_dropbox_account.ro_folder.blank?
     else
       return false
     end

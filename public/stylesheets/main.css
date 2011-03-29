@@ -331,6 +331,12 @@ img, a img {
   background-color: #FFF;
   border: 1px solid #DDD; }
 
+.or {
+  margin: 1em auto;
+  text-align: center;
+  font-size: 154%;
+  font-weight: bolder; }
+
 #hd {
   padding: 0; }
 
@@ -701,7 +707,7 @@ form.sign_up_main {
   padding: 0.6em 1em;
   margin: 1em 0;
   background-color: #F3F3F3;
-  border: 1px dotted #DDD; }
+  border: 1px solid #DDD; }
 
 .box_info {
   background: #E9F7CC;
@@ -780,5 +786,9 @@ form.sign_up_main {
   .tab-container .panel-container {
     padding: 1em 1.2em 0.7em 120px;
     background-color: #FFF; }
+
+form.specify_ro_folder {
+  width: 400px;
+  margin: 0 auto; }
 
 /* END content tabs styles */

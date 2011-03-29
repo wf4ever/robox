@@ -1,0 +1,30 @@
+= title "Specify your ROs Folder"
+
+.box_description
+  %p
+    Here you need to specify which folder in your Dropbox contains all your Research Object
+    folders. All sub-folders within this folder will be treated as individual Research Objects. 
+  %p
+    For example, if you specify 
+    %em
+      'Work/ROs' 
+    as your ROs folder, then 
+    %em
+      'Work/ROs/analysis1' 
+    and
+    %em 
+    'Work/ROs/analysis2' 
+    will be treated as two different Research Objects.
+  %p
+    %strong
+      NOTE:
+    if this folder doesn't exist in your Dropbox it will be created.
+  
+= semantic_form_for @dropbox_account,
+                    :url => set_ro_folder_dropbox_account_path(@dropbox_account),
+                    :html => { :method => :post,
+                               :class => "specify_ro_folder" } do |f|
+  = f.inputs do
+    = f.input :ro_folder, :label => "Folder"
+    = f.buttons do
+      = f.commit_button "Configure" 

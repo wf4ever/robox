@@ -1,6 +1,10 @@
 class DropboxAccountsController < ApplicationController
   
-  def authorise
+  before_filter :authenticate_user!, :except => [ :connect ]
+  
+  load_and_authorize_resource :except => :connect
+  
+  def connect
     if params[:oauth_token] then
       dropbox_session = Dropbox::Session.deserialize(session[:dropbox_session])
       dropbox_session.authorize(params)
@@ -44,8 +48,20 @@ class DropboxAccountsController < ApplicationController
     else
       dropbox_session = Dropbox::Session.new(Settings.dropbox.consumer_key, Settings.dropbox.consumer_secret)
       session[:dropbox_session] = dropbox_session.serialize
-      redirect_to dropbox_session.authorize_url(:oauth_callback => url_for(:action => 'authorise'))
+      redirect_to dropbox_session.authorize_url(:oauth_callback => url_for(:action => 'connect'))
     end
+  end
+  
+  def specify_ro_folder
+    
+  end
+  
+  def set_ro_folder
+    @dropbox_account.ro_folder = params[:dropbox_account][:ro_folder]
+    @dropbox_account.ensure_ro_folder
+    @dropbox_account.save!
+    flash[:success] = "Successfully set up your ROs folder"
+    redirect_to root_url
   end
 
 end
