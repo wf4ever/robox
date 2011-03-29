@@ -420,9 +420,9 @@ img, a img {
   -webkit-border-radius: 6px;
   min-height: 531.2px;
   border: 1px solid #afbbd2;
-  -moz-box-shadow: -1px -1px 3px #cccccc;
-  -webkit-box-shadow: -1px -1px 3px #cccccc;
-  box-shadow: -1px -1px 3px #cccccc; }
+  -moz-box-shadow: -2px -2px 2px #dddddd;
+  -webkit-box-shadow: -2px -2px 2px #dddddd;
+  box-shadow: -2px -2px 2px #dddddd; }
   #sidebar .inner {
     margin: 1em 0 1em 0.6em; }
     #sidebar .inner .section {

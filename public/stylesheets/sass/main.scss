@@ -212,7 +212,7 @@ img, a img {
   @include rounded(6px);
   min-height: 500px + (2.4*13);
   border: 1px solid $main-border-color;
-  @include shadowed(-1px, -1px);
+  @include shadowed(-2px, -2px, 2px, #DDD);
   
   .inner {
     margin: 1em 0 1em 0.6em;

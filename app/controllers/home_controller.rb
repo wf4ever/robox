@@ -32,7 +32,7 @@ class HomeController < ApplicationController
     })
     
     step_data_4 = Hashie::Mash.new({
-      :text => "Ready! See your Dashboard",
+      :text => "Ready! View your Dashboard",
       :action_label => "Dashboard",
       :action_path => ""
     })
