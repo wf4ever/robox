@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   
-  before_filter :prepare_wizard_data
+  before_filter :prepare_wizard_data, :only => [ :index ]
   
   def index
   end

@@ -1,4 +1,5 @@
 %nav#main_nav
   #site_tabs
     %ul
-      %li{:class => "#{@selected_site_tab == :home ? 'active' : ''}" }= link_to 'Home', root_path
+      - @site_tabs.each do |k,v|
+        %li{:class => "#{@selected_site_tab == k ? 'active' : ''}" }= link_to v.label, v.path

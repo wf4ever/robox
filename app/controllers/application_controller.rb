@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+  
+  before_filter :build_site_tabs
+  
   protect_from_forgery
   
   before_filter :set_previous_url
@@ -17,7 +20,9 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || root_url)
   end
   
+  
   protected
+  
   
   def is_api_request?
     return [ :xml, :atom, :json ].include?(self.request.format.to_sym)
@@ -36,14 +41,10 @@ class ApplicationController < ActionController::Base
   end
   
   def get_selected_site_tab
-    c = controller_name.downcase.to_sym
-    a = action_name.downcase.to_sym
-    
-    @selected_site_tab =
-    if c == :components and a == :new 
-      :new_component
-    else
-      c
+    @site_tabs.each do |k,v|
+      if v.path.downcase == request.path.downcase
+        @selected_site_tab = k
+      end
     end
   end
   
@@ -155,4 +156,33 @@ class ApplicationController < ActionController::Base
   def error_to_back_or_home(msg, forbidden=false, status_code=(forbidden ? 403 : 400))
     error([ msg ], :back_first => true, :forbidden => forbidden, :status => status_code)
   end
+  
+  
+  private
+  
+  
+  # TODO: this is currently being created on every request.
+  # NOT GOOD. Change so that some form of caching is used.
+  def build_site_tabs
+    puts "\nBuilding site_tabs"
+    if @site_tabs.blank?
+      @site_tabs = { }
+      
+      @site_tabs[:getting_started] = build_site_tab_info("Getting Started", root_path)
+      @site_tabs[:sync_status] = build_site_tab_info("Sync Status", "/pending")
+      @site_tabs[:dashboard] = build_site_tab_info("Dashboard", "/pending")
+      
+      @site_tabs.freeze
+    end
+    puts "@site_tabs = #{@site_tabs.inspect}\n"
+    @site_tabs
+  end
+  
+  def build_site_tab_info(label, path)
+    Hashie::Mash.new({
+      :label => label,
+      :path => path
+    })
+  end
+  
 end

@@ -17,6 +17,15 @@
   -webkit-border-radius: $size;
 }
 
+@mixin left-rounded($size) {
+  border-top-left-radius: $size;
+  border-bottom-left-radius: $size;
+  -moz-border-radius-topleft: $size;
+  -moz-border-radius-bottomleft: $size;
+  -webkit-border-top-left-radius: $size;
+  -webkit-border-bottom-left-radius: $size;
+}
+
 @mixin shadowed($h-offset=1px, $v-offset=1px, $blur-radius=3px, $colour=#CCC) {
   -moz-box-shadow: $h-offset $v-offset $blur-radius $colour;
   -webkit-box-shadow: $h-offset $v-offset $blur-radius $colour;
