@@ -22,8 +22,7 @@
   
 = semantic_form_for @dropbox_account,
                     :url => set_ro_folder_dropbox_account_path(@dropbox_account),
-                    :html => { :method => :post,
-                               :class => "specify_ro_folder" } do |f|
+                    :html => { :class => "specify_ro_folder" } do |f|
   = f.inputs do
     = f.input :ro_folder, :label => "Folder"
     = f.buttons do

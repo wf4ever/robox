@@ -3,7 +3,7 @@ Wf4EverDropboxConnector::Application.routes.draw do
   resources :dropbox_accounts do
     member do 
       get :specify_ro_folder
-      post :set_ro_folder
+      put :set_ro_folder
     end
   end
   
