@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   
   def ros_folder_specified?
     if dropbox_account_connected?
-      return !main_dropbox_account.ro_folder.blank?
+      return main_dropbox_account.ro_folder_exists?
     else
       return false
     end
