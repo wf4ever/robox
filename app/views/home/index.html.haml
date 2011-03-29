@@ -11,7 +11,7 @@
   %table
     %tbody
       - @wizard_data.steps.each do |step_data|
-        %tr
+        %tr{ :class => step_data.status }
           %td
             = getting_started_status_icon(step_data.status)
           %td{ :class => "step_text #{step_data.status}" }

@@ -401,7 +401,11 @@ img, a img {
     @include font-size(14px);
   }
   
-  .not_available {
+  tr.pending {
+    background-color: #EEE;
+  }
+  
+  td.not_available {
     color: #999 !important;
   }
 
