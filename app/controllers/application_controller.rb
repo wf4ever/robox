@@ -164,7 +164,6 @@ class ApplicationController < ActionController::Base
   # TODO: this is currently being created on every request.
   # NOT GOOD. Change so that some form of caching is used.
   def build_site_tabs
-    puts "\nBuilding site_tabs"
     if @site_tabs.blank?
       @site_tabs = { }
       
@@ -174,7 +173,6 @@ class ApplicationController < ActionController::Base
       
       @site_tabs.freeze
     end
-    puts "@site_tabs = #{@site_tabs.inspect}\n"
     @site_tabs
   end
   
