@@ -20,6 +20,10 @@ class User < ActiveRecord::Base
   def role?(role)
     return !!self.roles.find_by_name( Role.sanitize role )
   end
+  
+  def admin?
+    role?('Admin')
+  end
 
   def destroy
     self.update_attribute(:deleted_at, Time.now.utc)

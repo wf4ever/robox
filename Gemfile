@@ -26,6 +26,8 @@ gem "rails_config"
 gem 'yaml_db', '>= 0.2' 
 gem 'dropbox', '~> 1.2.3'
 gem 'hashie'
+gem 'delayed_job'
+gem 'delayed_job_admin'
 
 gem 'dummy_dropbox', :group => :test
 gem "awesome_print", :group => [:test, :development]

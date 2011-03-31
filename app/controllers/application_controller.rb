@@ -22,7 +22,18 @@ class ApplicationController < ActionController::Base
   
   
   protected
-  
+
+
+  def delayed_job_admin_authentication
+    authenticate_user!
+    
+    if current_user.admin?
+      return true
+    else
+      flash[:error] = "Access denied!"
+      redirect_to(session[:return_to] || root_url)
+    end
+  end
   
   def is_api_request?
     return [ :xml, :atom, :json ].include?(self.request.format.to_sym)

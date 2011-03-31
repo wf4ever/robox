@@ -72,6 +72,12 @@ GEM
     database_cleaner (0.6.6)
     database_validation (0.0.5)
     default_value_for (1.0.1)
+    delayed_job (2.1.4)
+      activesupport (~> 3.0)
+      daemons
+    delayed_job_admin (1.0.2)
+      delayed_job
+      rails
     devise (1.1.9)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 1.0.2)
@@ -255,6 +261,8 @@ DEPENDENCIES
   database_cleaner
   database_validation (>= 0.0.5)
   default_value_for
+  delayed_job
+  delayed_job_admin
   devise (~> 1.1.3)
   dropbox (~> 1.2.3)
   dummy_dropbox
