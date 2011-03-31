@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110331092315) do
+ActiveRecord::Schema.define(:version => 20110331152526) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -69,6 +69,15 @@ ActiveRecord::Schema.define(:version => 20110331092315) do
 
   add_index "slugs", ["name", "sluggable_type", "sequence", "scope"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
+
+  create_table "sync_jobs", :force => true do |t|
+    t.integer  "dropbox_account_id", :null => false
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.string   "status",             :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "", :null => false
