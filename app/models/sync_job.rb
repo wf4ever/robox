@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110401105537
+# Schema version: 20110401144426
 #
 # Table name: sync_jobs
 #
@@ -10,6 +10,8 @@
 #  status_code        :string(255)     not null
 #  created_at         :datetime
 #  updated_at         :datetime
+#  error_message      :string(255)
+#  stats              :text(16777215)
 #
 
 class SyncJob < ActiveRecord::Base
@@ -44,7 +46,45 @@ class SyncJob < ActiveRecord::Base
   end
   
   def run
+    current_stats = { }
     
+    start!
+    
+    workspace = dropbox_account.get_workspace
+    
+    if workspace
+      begin
+        update_status! :running
+        
+        
+      rescue Exception => ex
+        Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID #{id}"
+        status :failed
+        error_message = "A fatal error occurred during sync. See logs for exception details."
+        save!
+      end
+    else
+      status = :failed
+      error_message = "Could not access workspace - #{dropbox_account.workspace_id}"
+      save!
+    end
+    
+    finish!
+  end
+  
+  protected
+  
+  def start!
+    update_attribute :started_at, Time.now
+  end
+  
+  def finish!
+    update_attribute :finished_at, Time.now
+  end
+  
+  def update_status!(new_status)
+    status = new_status
+    save!
   end
   
 end

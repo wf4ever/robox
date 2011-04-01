@@ -1,17 +1,20 @@
 # == Schema Information
-# Schema version: 20110401105537
+# Schema version: 20110401144426
 #
 # Table name: dropbox_accounts
 #
-#  id              :integer(4)      not null, primary key
-#  user_id         :integer(4)      not null
-#  dropbox_user_id :string(255)     not null
-#  access_token    :string(255)     not null
-#  access_secret   :string(255)     not null
-#  created_at      :datetime
-#  updated_at      :datetime
-#  ro_folder       :string(255)
+#  id                 :integer(4)      not null, primary key
+#  user_id            :integer(4)      not null
+#  dropbox_user_id    :string(255)     not null
+#  access_token       :string(255)     not null
+#  access_secret      :string(255)     not null
+#  created_at         :datetime
+#  updated_at         :datetime
+#  ro_folder          :string(255)
+#  workspace_password :string(255)
 #
+
+require 'hmac-md5'
 
 class DropboxAccount < ActiveRecord::Base
   
@@ -79,6 +82,38 @@ class DropboxAccount < ActiveRecord::Base
     end
     
     return @dropbox_session
+  end
+  
+  def workspace_id
+    "dropbox-#{dropbox_user_id}"
+  end
+  
+  # This registers the workspace in the RO SRS if required
+  def get_workspace
+    # TODO: this should really check the presence of the workspace
+    # instead of just checking the password exists
+    if workspace_password.blank?
+      begin
+        workspace_password = HMAC::MD5.new(Wf4EverDropboxConnector::Application.config.secret_token + dropbox_user_id + rand(100)).hexdigest
+        workspace = DlibraClient::Workspace.create(
+            Settings.rosrs.base_uri,
+            workspace_id,
+            workspace_password,
+            Settings.rosrs.admin_username,
+            Settings.rosrs.admin_password)
+        
+        if workspace.nil?
+          return nil
+        else
+          save!
+          return workspace
+        end
+      rescue Exception => ex
+        Util.log_exception ex, :error, "Exception occurred during DropboxAccount#ensure_workspace for DropboxAccount ID #{id}"
+        workspace_password = nil
+        return nil
+      end
+    end
   end
   
 end
