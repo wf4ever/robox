@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 20110401105537
+#
+# Table name: sync_jobs
+#
+#  id                 :integer(4)      not null, primary key
+#  dropbox_account_id :integer(4)      not null
+#  started_at         :datetime
+#  finished_at        :datetime
+#  status_code        :string(255)     not null
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
 require 'spec_helper'
 
 describe SyncJob do

@@ -1,3 +1,18 @@
+# == Schema Information
+# Schema version: 20110401105537
+#
+# Table name: dropbox_accounts
+#
+#  id              :integer(4)      not null, primary key
+#  user_id         :integer(4)      not null
+#  dropbox_user_id :string(255)     not null
+#  access_token    :string(255)     not null
+#  access_secret   :string(255)     not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#  ro_folder       :string(255)
+#
+
 require 'spec_helper'
 
 describe DropboxAccount do

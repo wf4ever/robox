@@ -35,7 +35,7 @@ gem "awesome_print", :group => [:test, :development]
 gem "flutie", "~> 1.1", :group => :development
 gem 'jquery-rails', '>= 0.2.6', :group => :development
 gem "annotate", :group => :development
-# gem "railroady", :group => [:test, :development]      Currently (v1.0.1) breaks rails generate scaffold
+#gem "railroady", :group => [:test, :development]     # Currently (v1.0.2) breaks rails generate scaffold
 gem "rails3-generators", :group => :development
 gem "hpricot", :group => :development
 gem "ruby_parser", :group => :development
