@@ -5,7 +5,14 @@ class SyncJob < ActiveRecord::Base
             :running => "RUNNING", 
             :failed => "FAILED", 
             :success => "SUCCESS" },
-          :upcase => true
+          :upcase => true,
+          :column => 'status_code'
+          
+  include DatabaseValidation
+  
+  validates_as_enum :status
+  
+  default_value_for :status, :pending
   
   attr_accessible :dropbox_account_id
   
@@ -14,6 +21,13 @@ class SyncJob < ActiveRecord::Base
   
   belongs_to :dropbox_account
   
+  def started?
+    !started_at.blank?
+  end
+  
+  def finished?
+    !finished_at.blank?
+  end
   
   def run
     

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110331152526) do
+ActiveRecord::Schema.define(:version => 20110401105537) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(:version => 20110331152526) do
     t.integer  "dropbox_account_id", :null => false
     t.datetime "started_at"
     t.datetime "finished_at"
-    t.string   "status",             :null => false
+    t.string   "status_code",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
