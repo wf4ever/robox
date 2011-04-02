@@ -35,7 +35,11 @@ class SyncJob < ActiveRecord::Base
   validates :dropbox_account,
             :existence => true
   
+  validate :check_ro_folder_exists
+  
   belongs_to :dropbox_account
+  
+  serialize :stats, Hash
   
   def started?
     !started_at.blank?
@@ -46,33 +50,54 @@ class SyncJob < ActiveRecord::Base
   end
   
   def run
-    current_stats = { }
-    
-    start!
-    
-    workspace = dropbox_account.get_workspace
-    
-    if workspace
-      begin
-        update_status! :running
-        
-        
-      rescue Exception => ex
-        Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID #{id}"
-        status :failed
-        error_message = "A fatal error occurred during sync. See logs for exception details."
-        save!
+    unless started?
+      ok = true
+      current_stats = { }
+      
+      start!
+      
+      # Check if the Dropbox account still has a valid ROs folder specified
+      ro_folder = dropbox_account.ro_folder_metadata
+      if ro_folder.blank?
+        status = :failed
+        add_error_message "Could not access the ROs folder '#{dropbox_account.ro_older}' in the DropboxAccount ID '#{dropbox_account.id}'"
+        ok = false
       end
-    else
-      status = :failed
-      error_message = "Could not access workspace - #{dropbox_account.workspace_id}"
+      
+      # Check workspace is available
+      workspace = dropbox_account.get_workspace
+      if workspace.blank?
+        status = :failed
+        add_error_message "Could not access workspace with ID '#{dropbox_account.workspace_id}'"
+        ok = false
+      end 
+      
+      if ok
+        begin
+          update_status! :running
+          
+          
+          
+        rescue Exception => ex
+          Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
+          status = :failed
+          add_error_message "A fatal error occurred during sync. See logs for exception details."
+          ok = false
+        end
+      end
+      
+      stats = current_stats
       save!
+      
+      finish!
     end
-    
-    finish!
   end
   
   protected
+  
+  def check_ro_folder_exists
+    errors.add(:dropbox_account, "doesn't have an ROs folder (it may not exist anymore)") unless dropbox_account.ro_folder_exists?
+  end
   
   def start!
     update_attribute :started_at, Time.now
@@ -85,6 +110,11 @@ class SyncJob < ActiveRecord::Base
   def update_status!(new_status)
     status = new_status
     save!
+  end
+  
+  def add_error_message(msg)
+    error_message ||= ''
+    error_message += "#{msg}\n\n"
   end
   
 end
