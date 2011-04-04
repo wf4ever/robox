@@ -85,11 +85,16 @@ class DropboxAccount < ActiveRecord::Base
   end
   
   def workspace_id
-    "dropbox-#{dropbox_user_id}"
+    "dropbox-#{dropbox_user_id}-#{ro_folder}"
   end
   
   # This registers the workspace in the RO SRS if required
   def get_workspace
+    unless ro_folder_exists?
+      Util.yell "Cannot create workspace with ID '#{workspace_id}' for Dropbox Account ID '#{id}' as the RO folder does not exist (or is not set) for this account"
+      return nil
+    end
+    
     # TODO: this should really check the presence of the workspace
     # instead of just checking the password exists
     if workspace_password.blank?
@@ -109,9 +114,17 @@ class DropboxAccount < ActiveRecord::Base
           return workspace
         end
       rescue Exception => ex
-        Util.log_exception ex, :error, "Exception occurred during DropboxAccount#ensure_workspace for DropboxAccount ID #{id}"
+        Util.log_exception ex, :error, "Exception occurred during DropboxAccount#get_workspace (when no workspace_password existed) for DropboxAccount ID #{id}"
         workspace_password = nil
         return nil
+      end
+    else
+      begin
+        return DlibraClient::Workspace.new(Settings.rosrs.base_uri, workspace_id, workspace_password)
+      rescue Exception => ex
+        Util.log_exception ex, :error, "Exception occurred during DropboxAccount#get_workspace (when workspace_password existed) for DropboxAccount ID #{id}"
+        return nil
+      end
       end
     end
   end
