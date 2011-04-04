@@ -125,7 +125,6 @@ class DropboxAccount < ActiveRecord::Base
         Util.log_exception ex, :error, "Exception occurred during DropboxAccount#get_workspace (when workspace_password existed) for DropboxAccount ID #{id}"
         return nil
       end
-      end
     end
   end
   
