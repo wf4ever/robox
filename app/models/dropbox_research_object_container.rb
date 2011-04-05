@@ -31,6 +31,12 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   
   has_many :sync_jobs
   
+
+  has_many :research_objects,
+           :class_name => "ResearchObject",
+           :foreign_key => "dropbox_research_object_container_id",
+           :dependent => :destroy
+  
   before_save :set_workspace_credentials
   after_save :ensure_workspace_exists_in_rosrs
   after_save :ensure_folder_exists_in_dropbox
@@ -40,7 +46,7 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   end
   
   def dropbox_metadata
-    return exists? ? get_dropbox_session.metadata(path) : nil
+    return get_dropbox_session.metadata(path)
   end
   
   def exists?
