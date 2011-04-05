@@ -60,7 +60,7 @@ class SyncJob < ActiveRecord::Base
       ro_folder = dropbox_account.ro_folder_metadata
       if ro_folder.blank?
         status = :failed
-        add_error_message "Could not access the ROs folder '#{dropbox_account.ro_older}' in the DropboxAccount ID '#{dropbox_account.id}'"
+        add_error_message "Could not access the ROs folder '#{dropbox_account.ro_folder}' in the DropboxAccount ID '#{dropbox_account.id}'"
         ok = false
       end
       
@@ -76,8 +76,13 @@ class SyncJob < ActiveRecord::Base
         begin
           update_status! :running
           
+          ro_folder.contents.each do |entry|
+            if c.directory?
+              sync_ro(entry, dropbox_account.get_dropbox_session, workspace, stats)
+            end
+          end
           
-          
+          status = :success      
         rescue Exception => ex
           Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
           status = :failed
@@ -115,6 +120,11 @@ class SyncJob < ActiveRecord::Base
   def add_error_message(msg)
     error_message ||= ''
     error_message += "#{msg}\n\n"
+  end
+  
+  def sync_ro(ro_metadata, dropbox_session, workspace, stats)
+    
+    
   end
   
 end
