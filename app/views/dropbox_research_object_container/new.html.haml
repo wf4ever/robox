@@ -1,0 +1,31 @@
+= title "Add an ROs Container Folder"
+
+.box_description
+  %p
+    Here you can add a folder from your Dropbox that contains Research Object
+    folders. All sub-folders within this folder will be treated as individual 
+    Research Objects. 
+  %p
+    For example, if you specify 
+    %em
+      'Work/ROs' 
+    as your ROs folder, then 
+    %em
+      'Work/ROs/analysis1' 
+    and
+    %em 
+    'Work/ROs/analysis2' 
+    will be treated as two different Research Objects.
+  %p
+    %strong
+      NOTE:
+    if this folder doesn't exist in your Dropbox it will be created.
+  
+= semantic_form_for @dropbox_research_object_container, 
+    :url => dropbox_account_ro_containers_path(@dropbox_acccount), 
+    :html => { :class => "specify_ro_folder" } do |f|
+  = f.error_messages
+  = f.inputs do
+    = f.input :path, :label => "Folder"
+    = f.buttons do
+      = f.commit_button "Add" 

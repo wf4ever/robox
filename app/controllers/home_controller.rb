@@ -21,7 +21,7 @@ class HomeController < ApplicationController
     })
     
     step_data_2 = Hashie::Mash.new({
-      :text => "2. Specify the ROs folder in your Dropbox",
+      :text => "2. Specify an ROs container folder in your Dropbox",
       :action_label => "GO",
     })
     
@@ -37,11 +37,11 @@ class HomeController < ApplicationController
       :action_path => ""
     })
     
-    if user_signed_in? and current_user.dropbox_account_connected?
+    if user_signed_in? and current_user.has_a_dropbox_account?
       step_data_1.status = :done
       step_data_1.show_action = false
       
-      if current_user.ros_folder_specified?
+      if current_user.has_an_ro_container?
         step_data_2.status = :done
         step_data_2.show_action = false
         
@@ -61,7 +61,7 @@ class HomeController < ApplicationController
       else
         step_data_2.status = :pending
         step_data_2.show_action = true
-        step_data_2.action_path = specify_ro_folder_dropbox_account_path(current_user.main_dropbox_account)
+        step_data_2.action_path = new_dropbox_account_ro_container_path(current_user.main_dropbox_account)
       
         step_data_3.status = :not_available
         step_data_3.show_action = false

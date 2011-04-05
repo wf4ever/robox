@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110401154137) do
+ActiveRecord::Schema.define(:version => 20110405122455) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -28,14 +28,12 @@ ActiveRecord::Schema.define(:version => 20110401154137) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "dropbox_accounts", :force => true do |t|
-    t.integer  "user_id",            :null => false
-    t.string   "dropbox_user_id",    :null => false
-    t.string   "access_token",       :null => false
-    t.string   "access_secret",      :null => false
+    t.integer  "user_id",         :null => false
+    t.string   "dropbox_user_id", :null => false
+    t.string   "access_token",    :null => false
+    t.string   "access_secret",   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "ro_folder"
-    t.string   "workspace_password"
   end
 
   add_index "dropbox_accounts", ["dropbox_user_id"], :name => "index_dropbox_accounts_on_dropbox_user_id"
@@ -56,15 +54,27 @@ ActiveRecord::Schema.define(:version => 20110401154137) do
   add_index "dropbox_entries", ["research_object_id", "entry_type_code"], :name => "index_dropbox_entries_on_research_object_id_and_entry_type_code"
   add_index "dropbox_entries", ["research_object_id"], :name => "index_dropbox_entries_on_research_object_id"
 
-  create_table "research_objects", :force => true do |t|
-    t.string   "name",               :null => false
+  create_table "dropbox_research_object_containers", :force => true do |t|
     t.integer  "dropbox_account_id"
+    t.string   "path",               :null => false
+    t.string   "workspace_id"
+    t.string   "workspace_password"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "research_objects", ["dropbox_account_id", "name"], :name => "index_research_objects_on_dropbox_account_id_and_name", :unique => true
-  add_index "research_objects", ["dropbox_account_id"], :name => "index_research_objects_on_dropbox_account_id"
+  add_index "dropbox_research_object_containers", ["dropbox_account_id", "path"], :name => "index_research_objects_on_dbox_account_id_and_path", :unique => true
+  add_index "dropbox_research_object_containers", ["dropbox_account_id"], :name => "index_dropbox_research_object_containers_on_dropbox_account_id"
+
+  create_table "research_objects", :force => true do |t|
+    t.string   "name",                                 :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "dropbox_research_object_container_id"
+  end
+
+  add_index "research_objects", ["dropbox_research_object_container_id", "name"], :name => "index_research_objects_on_dbox_ro_container_id_and_name", :unique => true
+  add_index "research_objects", ["dropbox_research_object_container_id"], :name => "index_research_objects_on_dropbox_research_object_container_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name"
@@ -100,18 +110,18 @@ ActiveRecord::Schema.define(:version => 20110401154137) do
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
 
   create_table "sync_jobs", :force => true do |t|
-    t.integer  "dropbox_account_id",                     :null => false
     t.datetime "started_at"
     t.datetime "finished_at"
-    t.string   "status_code",                            :null => false
+    t.string   "status_code",                                              :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "error_message"
-    t.text     "stats",              :limit => 16777215
+    t.text     "stats",                                :limit => 16777215
+    t.integer  "dropbox_research_object_container_id"
   end
 
-  add_index "sync_jobs", ["dropbox_account_id", "status_code"], :name => "index_sync_jobs_on_dropbox_account_id_and_status_code"
-  add_index "sync_jobs", ["dropbox_account_id"], :name => "index_sync_jobs_on_dropbox_account_id"
+  add_index "sync_jobs", ["dropbox_research_object_container_id", "status_code"], :name => "index_sync_jobs_on_dbox_ro_container_id_and_status"
+  add_index "sync_jobs", ["dropbox_research_object_container_id"], :name => "index_sync_jobs_on_dropbox_research_object_container_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "", :null => false

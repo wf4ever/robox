@@ -77,20 +77,20 @@ class User < ActiveRecord::Base
     dropbox_accounts.count > 0 ? dropbox_accounts.first : nil
   end
   
-  def dropbox_account_connected?
+  def has_a_dropbox_account?
     !main_dropbox_account.nil?
   end
   
-  def ros_folder_specified?
-    if dropbox_account_connected?
-      return main_dropbox_account.ro_folder_exists?
+  def has_an_ro_container?
+    if has_a_dropbox_account?
+      return main_dropbox_account.has_an_ro_container?
     else
       return false
     end
   end
   
   def initially_synced?
-    if ros_folder_specified?
+    if has_an_ro_container?
       # TODO: check that an initial sync was established
       return false
     else

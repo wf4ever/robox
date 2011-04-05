@@ -151,7 +151,6 @@ GEM
     launchy (0.4.0)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
-    macaddr (1.0.0)
     mail (2.2.15)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -179,6 +178,7 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
+    railroady (1.0.2)
     rails (3.0.5)
       actionmailer (= 3.0.5)
       actionpack (= 3.0.5)
@@ -247,8 +247,7 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.25)
-    uuid (2.3.1)
-      macaddr (~> 1.0)
+    uuidtools (2.1.2)
     validate_url (0.2.0)
       activemodel (>= 3.0.0)
     validates_existence (0.6.0)
@@ -306,6 +305,7 @@ DEPENDENCIES
   mysql2
   nifty-generators
   pickle
+  railroady
   rails (= 3.0.5)
   rails3-generators
   rails_config
@@ -319,7 +319,7 @@ DEPENDENCIES
   sqlite3
   thin
   timecop
-  uuid
+  uuidtools
   validate_url
   validates_existence (>= 0.6)
   version_info

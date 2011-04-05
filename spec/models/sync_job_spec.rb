@@ -1,17 +1,22 @@
 # == Schema Information
-# Schema version: 20110401144426
+# Schema version: 20110405095020
 #
 # Table name: sync_jobs
 #
-#  id                 :integer(4)      not null, primary key
-#  dropbox_account_id :integer(4)      not null
-#  started_at         :datetime
-#  finished_at        :datetime
-#  status_code        :string(255)     not null
-#  created_at         :datetime
-#  updated_at         :datetime
-#  error_message      :string(255)
-#  stats              :text(16777215)
+#  id                                   :integer(4)      not null, primary key
+#  started_at                           :datetime
+#  finished_at                          :datetime
+#  status_code                          :string(255)     not null
+#  created_at                           :datetime
+#  updated_at                           :datetime
+#  error_message                        :string(255)
+#  stats                                :text(16777215)
+#  dropbox_research_object_container_id :integer(4)
+#
+# Indexes
+#
+#  index_sync_jobs_on_dropbox_research_object_container_id  (dropbox_research_object_container_id)
+#  index_sync_jobs_on_dbox_ro_container_id_and_status       (dropbox_research_object_container_id,status_code)
 #
 
 require 'spec_helper'

@@ -3,6 +3,8 @@ class CreateDropboxResearchObjectContainers < ActiveRecord::Migration
     create_table :dropbox_research_object_containers do |t|
       t.belongs_to :dropbox_account
       t.string :path, :null => false
+      t.string :workspace_id
+      t.string :workspace_password
       
       t.timestamps
     end

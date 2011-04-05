@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110401144426
+# Schema version: 20110405093135
 #
 # Table name: dropbox_entries
 #
@@ -12,6 +12,12 @@
 #  revision           :integer(4)      not null
 #  created_at         :datetime
 #  updated_at         :datetime
+#
+# Indexes
+#
+#  index_dropbox_entries_on_research_object_id                      (research_object_id)
+#  index_dropbox_entries_on_research_object_id_and_entry_type_code  (research_object_id,entry_type_code)
+#  index_dropbox_entries_on_parent_id                               (parent_id)
 #
 
 class DropboxEntry < ActiveRecord::Base

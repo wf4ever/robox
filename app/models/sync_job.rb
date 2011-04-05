@@ -1,17 +1,22 @@
 # == Schema Information
-# Schema version: 20110401144426
+# Schema version: 20110405095020
 #
 # Table name: sync_jobs
 #
-#  id                 :integer(4)      not null, primary key
-#  dropbox_account_id :integer(4)      not null
-#  started_at         :datetime
-#  finished_at        :datetime
-#  status_code        :string(255)     not null
-#  created_at         :datetime
-#  updated_at         :datetime
-#  error_message      :string(255)
-#  stats              :text(16777215)
+#  id                                   :integer(4)      not null, primary key
+#  started_at                           :datetime
+#  finished_at                          :datetime
+#  status_code                          :string(255)     not null
+#  created_at                           :datetime
+#  updated_at                           :datetime
+#  error_message                        :string(255)
+#  stats                                :text(16777215)
+#  dropbox_research_object_container_id :integer(4)
+#
+# Indexes
+#
+#  index_sync_jobs_on_dropbox_research_object_container_id  (dropbox_research_object_container_id)
+#  index_sync_jobs_on_dbox_ro_container_id_and_status       (dropbox_research_object_container_id,status_code)
 #
 
 class SyncJob < ActiveRecord::Base
@@ -30,14 +35,14 @@ class SyncJob < ActiveRecord::Base
   
   default_value_for :status, :pending
   
-  attr_accessible :dropbox_account_id
+  attr_accessible :dropbox_research_object_container_id
   
-  validates :dropbox_account,
+  validates :ro_container,
             :existence => true
   
-  validate :check_ro_folder_exists
-  
-  belongs_to :dropbox_account
+  belongs_to :ro_container,
+             :class_name => "DropboxResearchObjectContainer",
+             :foreign_key => "dropbox_research_object_container_id"
   
   serialize :stats, Hash
   
@@ -56,19 +61,21 @@ class SyncJob < ActiveRecord::Base
       
       start!
       
-      # Check if the Dropbox account still has a valid ROs folder specified
-      ro_folder = dropbox_account.ro_folder_metadata
-      if ro_folder.blank?
+      dropbox_account = ro_container.dropbox_account
+      
+      # Check that the RO container folder still exists
+      ro_container_metadata = ro_container.dropbox_metadata
+      if ro_container_metadata.blank?
         status = :failed
-        add_error_message "Could not access the ROs folder '#{dropbox_account.ro_folder}' in the DropboxAccount ID '#{dropbox_account.id}'"
+        add_error_message "Could not access the ROs container with ID '#{ro_container.id}' and path  '#{ro_container.path}'"
         ok = false
       end
       
       # Check workspace is available
-      workspace = dropbox_account.get_workspace
+      workspace = ro_container.get_workspace
       if workspace.blank?
         status = :failed
-        add_error_message "Could not access workspace with ID '#{dropbox_account.workspace_id}'"
+        add_error_message "Could not access workspace with ID '#{ro_container.workspace_id}' for ROs container with ID '#{ro_container.id}'"
         ok = false
       end 
       
@@ -76,7 +83,7 @@ class SyncJob < ActiveRecord::Base
         begin
           update_status! :running
           
-          ro_folder.contents.each do |entry|
+          ro_container_metadata.contents.each do |entry|
             if c.directory?
               sync_ro(entry, dropbox_account.get_dropbox_session, workspace, stats)
             end
@@ -99,10 +106,6 @@ class SyncJob < ActiveRecord::Base
   end
   
   protected
-  
-  def check_ro_folder_exists
-    errors.add(:dropbox_account, "doesn't have an ROs folder (it may not exist anymore)") unless dropbox_account.ro_folder_exists?
-  end
   
   def start!
     update_attribute :started_at, Time.now

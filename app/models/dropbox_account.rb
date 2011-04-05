@@ -1,17 +1,20 @@
 # == Schema Information
-# Schema version: 20110401144426
+# Schema version: 20110405093135
 #
 # Table name: dropbox_accounts
 #
-#  id                 :integer(4)      not null, primary key
-#  user_id            :integer(4)      not null
-#  dropbox_user_id    :string(255)     not null
-#  access_token       :string(255)     not null
-#  access_secret      :string(255)     not null
-#  created_at         :datetime
-#  updated_at         :datetime
-#  ro_folder          :string(255)
-#  workspace_password :string(255)
+#  id              :integer(4)      not null, primary key
+#  user_id         :integer(4)      not null
+#  dropbox_user_id :string(255)     not null
+#  access_token    :string(255)     not null
+#  access_secret   :string(255)     not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+# Indexes
+#
+#  index_dropbox_accounts_on_user_id          (user_id)
+#  index_dropbox_accounts_on_dropbox_user_id  (dropbox_user_id)
 #
 
 require 'hmac-md5'
@@ -24,8 +27,7 @@ class DropboxAccount < ActiveRecord::Base
                   :user,
                   :dropbox_user_id,
                   :access_token,
-                  :access_secret,
-                  :ro_folder
+                  :access_secret
   
   validates :user,
             :existence => true
@@ -33,45 +35,21 @@ class DropboxAccount < ActiveRecord::Base
   belongs_to :user,
              :autosave => true
   
+  has_many :ro_containers,
+           :class_name => "DropboxResearchObjectContainer",
+           :foreign_key => "dropbox_account_id",
+           :dependent => :destroy
+  
+  def dropbox_research_object_containers
+    ro_containers
+  end
+  
   def setup_user!(account_info)
     internal_user = User.find_or_create_by_email(account_info.email, :name => account_info.display_name)
     internal_user.role_ids = [ Role.find_or_create_by_name('Member').id ]
     internal_user.confirm!
     
     self.user = internal_user
-  end
-  
-  def ensure_ro_folder
-    if ro_folder.blank?
-      return false
-    else
-      session = get_dropbox_session
-      
-      begin
-        session.create_folder ro_folder
-      rescue Dropbox::FileExistsError
-        # Directory already exists!
-        Util.say "DropboxAccount#ensure_ro_folder called. RO folder already exists, so it's all good!"
-      end
-      
-      return true
-    end
-  end
-  
-  def ro_folder_metadata
-    unless ro_folder.blank?
-      return get_dropbox_session.metadata ro_folder
-    end
-  end
-  
-  def ro_folder_exists?
-    metadata = ro_folder_metadata
-    if metadata.blank?
-      return false
-    elsif metadata.members.include?(:is_deleted) && metadata[:is_deleted]
-      return false
-    end
-    return true
   end
   
   def get_dropbox_session
@@ -84,48 +62,8 @@ class DropboxAccount < ActiveRecord::Base
     return @dropbox_session
   end
   
-  def workspace_id
-    "dropbox-#{dropbox_user_id}-#{ro_folder}"
-  end
-  
-  # This registers the workspace in the RO SRS if required
-  def get_workspace
-    unless ro_folder_exists?
-      Util.yell "Cannot create workspace with ID '#{workspace_id}' for Dropbox Account ID '#{id}' as the RO folder does not exist (or is not set) for this account"
-      return nil
-    end
-    
-    # TODO: this should really check the presence of the workspace
-    # instead of just checking the password exists
-    if workspace_password.blank?
-      begin
-        workspace_password = HMAC::MD5.new(Wf4EverDropboxConnector::Application.config.secret_token + dropbox_user_id + rand(100)).hexdigest
-        workspace = DlibraClient::Workspace.create(
-            Settings.rosrs.base_uri,
-            workspace_id,
-            workspace_password,
-            Settings.rosrs.admin_username,
-            Settings.rosrs.admin_password)
-        
-        if workspace.nil?
-          return nil
-        else
-          save!
-          return workspace
-        end
-      rescue Exception => ex
-        Util.log_exception ex, :error, "Exception occurred during DropboxAccount#get_workspace (when no workspace_password existed) for DropboxAccount ID #{id}"
-        workspace_password = nil
-        return nil
-      end
-    else
-      begin
-        return DlibraClient::Workspace.new(Settings.rosrs.base_uri, workspace_id, workspace_password)
-      rescue Exception => ex
-        Util.log_exception ex, :error, "Exception occurred during DropboxAccount#get_workspace (when workspace_password existed) for DropboxAccount ID #{id}"
-        return nil
-      end
-    end
+  def has_an_ro_container?
+    return ro_containers.count > 0
   end
   
 end

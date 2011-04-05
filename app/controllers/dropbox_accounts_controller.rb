@@ -1,9 +1,5 @@
 class DropboxAccountsController < ApplicationController
   
-  before_filter :authenticate_user!, :except => [ :connect ]
-  
-  load_and_authorize_resource :except => :connect
-  
   def connect
     if params[:oauth_token] then
       dropbox_session = Dropbox::Session.deserialize(session[:dropbox_session])
@@ -52,16 +48,4 @@ class DropboxAccountsController < ApplicationController
     end
   end
   
-  def specify_ro_folder
-    
-  end
-  
-  def set_ro_folder
-    @dropbox_account.ro_folder = params[:dropbox_account][:ro_folder]
-    @dropbox_account.ensure_ro_folder
-    @dropbox_account.save!
-    flash[:success] = "Successfully set up your ROs folder"
-    redirect_to root_url
-  end
-
 end

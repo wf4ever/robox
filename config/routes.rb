@@ -1,10 +1,7 @@
 Wf4EverDropboxConnector::Application.routes.draw do
   
   resources :dropbox_accounts do
-    member do 
-      get :specify_ro_folder
-      put :set_ro_folder
-    end
+    resources :ro_containers, :controller => "DropboxResearchObjectContainer"
   end
   
   match 'connect' => 'dropbox_accounts#connect'
