@@ -78,14 +78,13 @@ class SyncJob < ActiveRecord::Base
         add_error_message "Could not access workspace with ID '#{ro_container.workspace_id}' for ROs container with ID '#{ro_container.id}'"
         ok = false
       end 
-      
       if ok
         begin
           update_status! :running
           
           ro_container_metadata.contents.each do |entry|
-            if c.directory?
-              sync_ro(entry, dropbox_account.get_dropbox_session, workspace, stats)
+            if entry.directory?
+              sync_ro(entry, dropbox_account, ro_container, workspace, stats)
             end
           end
           
@@ -125,9 +124,37 @@ class SyncJob < ActiveRecord::Base
     error_message += "#{msg}\n\n"
   end
   
-  def sync_ro(ro_metadata, dropbox_session, workspace, stats)
-    
-    
+  def sync_ro(ro_metadata, dropbox_account, ro_container, workspace, stats)
+ 	 name = ro_metadata.path.gsub(/.*\//, "")
+ 	 ro_srs = workspace[name]
+ 	 if !ro_srs
+ 	 	ro_srs = workspace.create_research_object(name)
+ 	 end
+
+	 ro_model = ro_container.research_objects.find_or_create_by_name(name)
+	 
+	 dropbox = dropbox_account.get_dropbox_session
+
+	 sync_ro_folder(ro_metadata.path, dropbox, ro_container)
+	 	
+	 	
+	 end
+	  
+	 
+ 	 # TODO: sync each file/folder
+ 	 
+  end
+
+  def sync_ro_folder(path, dropbox, ro_container, parent=nil)
+      dropbox.list(ro_metadata.path).each do |child|
+      	
+		# blah      		
+      		
+      		
+      	if child.directory?
+      		sync_ro_folder(child.path, dropbox, ro_container)
+      	end
+      end      
   end
   
 end
