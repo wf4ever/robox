@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110405122455) do
+ActiveRecord::Schema.define(:version => 20110406150131) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -67,10 +67,11 @@ ActiveRecord::Schema.define(:version => 20110405122455) do
   add_index "dropbox_research_object_containers", ["dropbox_account_id"], :name => "index_dropbox_research_object_containers_on_dropbox_account_id"
 
   create_table "research_objects", :force => true do |t|
-    t.string   "name",                                 :null => false
+    t.string   "name",                                                            :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "dropbox_research_object_container_id"
+    t.string   "path",                                 :default => "--unknown--", :null => false
   end
 
   add_index "research_objects", ["dropbox_research_object_container_id", "name"], :name => "index_research_objects_on_dbox_ro_container_id_and_name", :unique => true
