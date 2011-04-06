@@ -50,11 +50,15 @@ class DropboxEntry < ActiveRecord::Base
   validate :check_parent
   
   belongs_to :research_object
-  
+
   belongs_to :parent,
              :class_name => "DropboxEntry",
              :foreign_key => "parent_id"
-  
+
+  has_many :children,
+           :class_name => "DropboxEntry",
+           :foreign_key => "parent_id"
+             
   protected
   
   def check_entry_type_rules

@@ -61,5 +61,30 @@ describe DropboxEntry do
     entry.parent.should_not be_nil
     entry.should have(1).error_on(:parent)
   end
+
+
+  describe "#children" do
+
+    it "should only contain direct children" do
+      dir1 = Factory.create(:directory_dropbox_entry)
+      dir1.children(true).should be_empty
+      file1 = Factory.create(:file_dropbox_entry, :parent=>dir1)
+      dir1.children(true).should have_exactly(1).items
+
+      dir2 = Factory.create(:directory_dropbox_entry, :parent =>dir1)
+      dir1.children(true).should have_exactly(2).items
+      dir2.children(true).should be_empty
+      file2 = Factory.create(:file_dropbox_entry, :parent=>dir2)
+      dir1.children(true).should have_exactly(2).items
+      dir2.children(true).should have_exactly(1).items
+
+      
+      file3 = Factory.build(:file_dropbox_entry)
+      dir2.children << file3
+      file3.parent.should == dir2
+      dir2.children(true).should have_exactly(2).items
+
+    end
+  end
   
 end
