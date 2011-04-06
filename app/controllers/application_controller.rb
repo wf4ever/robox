@@ -179,7 +179,7 @@ class ApplicationController < ActionController::Base
       @site_tabs = { }
       
       @site_tabs[:getting_started] = build_site_tab_info("Getting Started", root_path)
-      @site_tabs[:add_ro_container] = build_site_tab_info("Add RO Container", new_dropbox_account_ro_container_path(current_user.try(:main_dropbox_account)))
+      #@site_tabs[:add_ro_container] = build_site_tab_info("Add RO Container", new_dropbox_account_ro_container_path(current_user.try(:main_dropbox_account)))
       @site_tabs[:sync_status] = build_site_tab_info("Sync Status", "/pending")
       @site_tabs[:dashboard] = build_site_tab_info("Dashboard", "/pending")
       
