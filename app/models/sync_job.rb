@@ -195,14 +195,16 @@ class SyncJob < ActiveRecord::Base
 
     for existing_model in parent.children
 
-      relative_path = existing_model.path[parent.path.length+1..-1]
+      relative_path = existing_model.path[ro_model.path.length+1..-1]
 
-       if exists_in_dropbox.count(relative_path)
+      if exists_in_dropbox.include?(relative_path)
+        puts "Not deleting " + relative_path
         next
       end
 
       resource = version_srs[relative_path]
       if resource
+        puts "Deleting " + relative_path
         resource.delete!
       end
       existing_model.delete
