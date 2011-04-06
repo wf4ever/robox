@@ -87,6 +87,7 @@ class SyncJob < ActiveRecord::Base
               sync_ro(entry, dropbox_account, ro_container, workspace, stats)
             end
           end
+          # TODO: Delete ROs now missing in dropbox
           
           status = :success      
         rescue Exception => ex
