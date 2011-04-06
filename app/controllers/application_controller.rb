@@ -177,10 +177,23 @@ class ApplicationController < ActionController::Base
   def build_site_tabs
     if @site_tabs.blank?
       @site_tabs = { }
-      
+
+      # Getting Started
       @site_tabs[:getting_started] = build_site_tab_info("Getting Started", root_path)
-      #@site_tabs[:add_ro_container] = build_site_tab_info("Add RO Container", new_dropbox_account_ro_container_path(current_user.try(:main_dropbox_account)))
+
+      # Add RO Container
+      add_ro_container_path =
+          if user_signed_in? && current_user.has_a_dropbox_account?
+            new_dropbox_account_ro_container_path(current_user.main_dropbox_account)
+          else
+            connect_path
+          end
+      @site_tabs[:add_ro_container] = build_site_tab_info("Add RO Container", add_ro_container_path)
+
+      # Sync Status
       @site_tabs[:sync_status] = build_site_tab_info("Sync Status", "/pending")
+
+      # Dashboard
       @site_tabs[:dashboard] = build_site_tab_info("Dashboard", "/pending")
       
       @site_tabs.freeze
