@@ -82,7 +82,6 @@ class SyncJob < ActiveRecord::Base
       if ok
         begin
           update_status! :running
-          
           ro_container_metadata.contents.each do |entry|
             if entry.directory?
               sync_ro(entry, dropbox_account, ro_container, workspace, stats)
@@ -137,9 +136,10 @@ class SyncJob < ActiveRecord::Base
       version_srs = ro_srs.create_version("v1")
     end
     
-
+    
     ro_model = ro_container.research_objects.find_or_create_by_name(name)
     ro_model.path = ro_metadata.path
+    ro_model.save!
     dropbox = dropbox_account.get_dropbox_session
 
     sync_ro_folder(ro_metadata.path, dropbox, ro_model, version_srs)
@@ -153,13 +153,17 @@ class SyncJob < ActiveRecord::Base
 	 
 
   def sync_ro_folder(ro_path, dropbox, ro_model, version_srs, parent=ro_model)
-	  dropbox.list(ro_path).each do |dbox_file|
+    exists_in_dropbox = []
+    dropbox.list(ro_path).each do |dbox_file|
 
       entry = parent.children.find_or_create_by_path(dbox_file.path)
+      
       entry.research_object = ro_model
-      
-      relative_path = dbox_file.path[parent.path.length+1..-1]
-      
+
+
+      relative_path = dbox_file.path[ro_model.path.length+1..-1]
+      exists_in_dropbox << relative_path
+
 	    if dbox_file.directory?
         entry.entry_type = :directory
         entry.hash = "-1"
@@ -180,12 +184,29 @@ class SyncJob < ActiveRecord::Base
           # update the resource
           resource.content = content
         else
+          puts "Uploading " + relative_path
           resource = version_srs.upload_resource(relative_path, APPLICATION_OCTET_STREAM, content)
         end
       end
       entry.revision = dbox_file.revision
       entry.save!
     end
+
+
+    for existing_model in parent.children
+
+      relative_path = existing_model.path[parent.path.length+1..-1]
+
+       if exists_in_dropbox.count(relative_path)
+        next
+      end
+
+      resource = version_srs[relative_path]
+      if resource
+        resource.delete!
+      end
+      existing_model.delete
+    end
   end
-  
+
 end
