@@ -20,6 +20,7 @@ class ResearchObject < ActiveRecord::Base
   include DatabaseValidation
   
   attr_accessible :name,
+                  :path,
                   :dropbox_research_object_container_id
   
   validates :ro_container,
