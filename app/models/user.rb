@@ -74,11 +74,11 @@ class User < ActiveRecord::Base
   end
   
   def main_dropbox_account
-    dropbox_accounts.count > 0 ? dropbox_accounts.first : nil
+    has_a_dropbox_account? ? dropbox_accounts.first : nil
   end
   
   def has_a_dropbox_account?
-    !main_dropbox_account.nil?
+    dropbox_accounts.count > 0
   end
   
   def has_an_ro_container?
