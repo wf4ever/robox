@@ -21,7 +21,8 @@
 
 class SyncJob < ActiveRecord::Base
   
-  as_enum :status, 
+  APPLICATION_OCTET_STREAM = "application/octet-stream"
+  as_enum :status,
           { :pending => "PENDING", 
             :running => "RUNNING", 
             :failed => "FAILED", 
@@ -123,31 +124,67 @@ class SyncJob < ActiveRecord::Base
     error_message ||= ''
     error_message += "#{msg}\n\n"
   end
-  
-  def sync_ro(ro_metadata, dropbox_account, ro_container, workspace, stats)
- 	 name = ro_metadata.path.gsub(/.*\//, "")
- 	 ro_srs = workspace[name]
- 	 if !ro_srs
- 	 	ro_srs = workspace.create_research_object(name)
- 	 end
 
-	 ro_model = ro_container.research_objects.find_or_create_by_name(name)
-	 
-	 dropbox = dropbox_account.get_dropbox_session
-	 sync_ro_folder(ro_metadata.path, dropbox, ro_container)
+  def sync_ro(ro_metadata, dropbox_account, ro_container, workspace, stats)
+    name = ro_metadata.path.gsub(/.*\//, "")
+    ro_srs = workspace[name]
+    if !ro_srs
+      ro_srs = workspace.create_research_object(name)
+    end
+
+    version_srs = ro_srs["v1"]
+    if ! version_srs
+      version_srs = ro_srs.create_version("v1")
+    end
+    
+
+    ro_model = ro_container.research_objects.find_or_create_by_name(name)
+    ro_model.path = ro_metadata.path
+    dropbox = dropbox_account.get_dropbox_session
+
+    sync_ro_folder(ro_metadata.path, dropbox, ro_model, version_srs)
+
+    manifest_content = version_srs.manifest_rdf
+    manifest_path = ro_metadata.path + "/"
+    dropbox.upload(StringIO.new(manifest_content), manifest_path, :as => "manifest.rdf")
+
   end
 	  
 	 
 
-  def sync_ro_folder(path, dropbox, ro_container, parent=nil)
-	  dropbox.list(ro_metadata.path).each do |child|
-    
-	      		
-	    if child.directory?    	
-	      	sync_ro_folder(child.path, dropbox, ro_container)
-	    else
-	    	
-	    end      
+  def sync_ro_folder(ro_path, dropbox, ro_model, version_srs, parent=ro_model)
+	  dropbox.list(ro_path).each do |dbox_file|
+
+      entry = parent.children.find_or_create_by_path(dbox_file.path)
+      entry.research_object = ro_model
+      
+      relative_path = dbox_file.path[parent.path.length+1..-1]
+      
+	    if dbox_file.directory?
+        entry.entry_type = :directory
+        entry.hash = "-1"
+        entry.revision = "-1"
+        entry.save!
+	      sync_ro_folder(dbox_file.path, dropbox, ro_model, version_srs, entry)
+        entry.hash = dbox_file.hash
+      elsif relative_path == "manifest.rdf"
+        entry.entry_type = :manifest
+      else
+        if entry.revision == dbox_file.revision || parent.hash == dbox_file.hash
+          next
+        end
+        entry.entry_type = :file
+        content = dropbox.download(dbox_file.path)
+        resource = version_srs[relative_path]
+        if resource
+          # update the resource
+          resource.content = content
+        else
+          resource = version_srs.upload_resource(relative_path, APPLICATION_OCTET_STREAM, content)
+        end
+      end
+      entry.revision = dbox_file.revision
+      entry.save!
     end
   end
   
