@@ -134,27 +134,21 @@ class SyncJob < ActiveRecord::Base
 	 ro_model = ro_container.research_objects.find_or_create_by_name(name)
 	 
 	 dropbox = dropbox_account.get_dropbox_session
-
 	 sync_ro_folder(ro_metadata.path, dropbox, ro_container)
-	 	
-	 	
-	 end
+  end
 	  
 	 
- 	 # TODO: sync each file/folder
- 	 
-  end
 
   def sync_ro_folder(path, dropbox, ro_container, parent=nil)
-      dropbox.list(ro_metadata.path).each do |child|
-      	
-		# blah      		
-      		
-      		
-      	if child.directory?
-      		sync_ro_folder(child.path, dropbox, ro_container)
-      	end
-      end      
+	  dropbox.list(ro_metadata.path).each do |child|
+    
+	      		
+	    if child.directory?    	
+	      	sync_ro_folder(child.path, dropbox, ro_container)
+	    else
+	    	
+	    end      
+    end
   end
   
 end
