@@ -18,7 +18,7 @@ gem "addressable"
 gem "validates_existence", ">= 0.6"
 gem "simple_enum"
 gem "default_value_for"
-gem "database_validation", ">= 0.0.5"
+gem "database_validation", ">= 0.0.5", :git => 'git://github.com/jits/database_validation.git'
 gem "sanitize"
 gem "version_info"  
 gem "wirble"
