@@ -7,6 +7,7 @@ namespace :robox do
         sync_job = c.sync_jobs.build
         sync_job.save!
         sync_job.delay.run
+        Util.say "Submitted new SyncJob for DropboxResearchObjectContainer with ID '#{c.id}'"
       end
     end
   end
