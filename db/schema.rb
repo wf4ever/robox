@@ -113,11 +113,11 @@ ActiveRecord::Schema.define(:version => 20110406150131) do
   create_table "sync_jobs", :force => true do |t|
     t.datetime "started_at"
     t.datetime "finished_at"
-    t.string   "status_code",                                             :null => false
+    t.string   "status_code",                                              :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "error_message"
-    t.text     "stats",                                :limit => 1048576
+    t.text     "stats",                                :limit => 16777215
     t.integer  "dropbox_research_object_container_id"
   end
 
