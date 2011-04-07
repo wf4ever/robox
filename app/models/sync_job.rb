@@ -37,21 +37,23 @@ class SyncJob < ActiveRecord::Base
   
   default_value_for :status, :pending
   
-  attr_accessible :dropbox_research_object_container_id
+  attr_accessible :dropbox_research_object_container_id,
+                    :status_code,
+                    :error_message
   
   validates :ro_container,
-            :existence => true
+             :existence => true
   
   belongs_to :ro_container,
-             :class_name => "DropboxResearchObjectContainer",
-             :foreign_key => "dropbox_research_object_container_id"
+              :class_name => "DropboxResearchObjectContainer",
+              :foreign_key => "dropbox_research_object_container_id"
   
   def started?
-    !started_at.blank?
+    !self.started_at.blank?
   end
   
   def finished?
-    !finished_at.blank?
+    !self.finished_at.blank?
   end
   
   def run
@@ -60,12 +62,10 @@ class SyncJob < ActiveRecord::Base
 
       start!
       
-      dropbox_account = ro_container.dropbox_account
-      
       # Check that the RO container folder still exists
       ro_container_metadata = ro_container.dropbox_metadata
       if ro_container_metadata.blank?
-        status = :failed
+        self.status = :failed
         add_error_message "Could not access the ROs container with ID '#{ro_container.id}' and path  '#{ro_container.path}'"
         ok = false
       end
@@ -73,27 +73,27 @@ class SyncJob < ActiveRecord::Base
       # Check workspace is available
       workspace = ro_container.get_workspace
       if workspace.blank?
-        status = :failed
+        self.status = :failed
         add_error_message "Could not access workspace with ID '#{ro_container.workspace_id}' for ROs container with ID '#{ro_container.id}'"
         ok = false
       end
       
       if ok
         begin
-          status = :running
-          save!
+          update_status! :running
 
           ro_container_metadata.contents.each do |entry|
             if entry.directory?
-              sync_ro(entry, dropbox_account, ro_container, workspace)
+              sync_ro(entry, workspace)
             end
           end
+          
           # TODO: Delete ROs now missing in dropbox
           
-          status = :success     
+          self.status = :success
         rescue Exception => ex
           Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
-          status = :failed
+          self.status = :failed
           add_error_message "A fatal error occurred during sync. See logs for exception details."
           ok = false
         end
@@ -104,7 +104,7 @@ class SyncJob < ActiveRecord::Base
       finish!
     end
   end
-  
+
   protected
   
   def start!
@@ -116,13 +116,22 @@ class SyncJob < ActiveRecord::Base
     Util.say "SyncJob #{id} finishing"
     update_attribute :finished_at, Time.now
   end
-  
-  def add_error_message(msg)
-    error_message ||= ''
-    error_message += "#{msg}\n\n"
+
+  def update_status!(new_status)
+    self.status = new_status
+    save!
   end
 
-  def sync_ro(ro_metadata, dropbox_account, ro_container, workspace)
+  def add_error_message(msg)
+    Util.say "Adding error message to SyncJob with ID #{id}: #{msg}"
+    if self.error_message.blank?
+      self.error_message = msg
+    else
+      self.error_message = self.error_message + "\n\n#{msg}"
+    end
+  end
+  
+  def sync_ro(ro_metadata, workspace)
     name = ro_metadata.path.gsub(/.*\//, "")
     ro_srs = workspace[name]
     if !ro_srs
@@ -138,21 +147,21 @@ class SyncJob < ActiveRecord::Base
     ro_model = ro_container.research_objects.find_or_create_by_name(name)
     ro_model.path = ro_metadata.path
     ro_model.save!
-    dropbox = dropbox_account.get_dropbox_session
 
-    sync_ro_folder(ro_metadata.path, dropbox, ro_model, version_srs)
+    dropbox_session = ro_container.get_dropbox_session
+
+    sync_ro_folder(ro_metadata.path, dropbox_session, ro_model, version_srs)
 
     manifest_content = version_srs.manifest_rdf
     manifest_path = ro_metadata.path + "/"
-    dropbox.upload(StringIO.new(manifest_content), manifest_path, :as => "manifest.rdf")
-
+    dropbox_session.upload(StringIO.new(manifest_content), manifest_path, :as => "manifest.rdf")
   end
 	  
 	 
 
-  def sync_ro_folder(ro_path, dropbox, ro_model, version_srs, parent=ro_model)
+  def sync_ro_folder(ro_path, dropbox_session, ro_model, version_srs, parent=ro_model)
     exists_in_dropbox = []
-    dropbox.list(ro_path).each do |dbox_file|
+    dropbox_session.list(ro_path).each do |dbox_file|
 
       entry = parent.children.find_or_create_by_path(dbox_file.path)
       
@@ -167,7 +176,7 @@ class SyncJob < ActiveRecord::Base
         entry.hash = "-1"
         entry.revision = "-1"
         entry.save!
-	      sync_ro_folder(dbox_file.path, dropbox, ro_model, version_srs, entry)
+	      sync_ro_folder(dbox_file.path, dropbox_session, ro_model, version_srs, entry)
         entry.hash = dbox_file.hash
       elsif relative_path == "manifest.rdf"
         entry.entry_type = :manifest
@@ -176,7 +185,7 @@ class SyncJob < ActiveRecord::Base
           next
         end
         entry.entry_type = :file
-        content = dropbox.download(dbox_file.path)
+        content = dropbox_session.download(dbox_file.path)
         resource = version_srs[relative_path]
         if resource
           # update the resource
