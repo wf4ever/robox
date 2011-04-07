@@ -17,3 +17,4 @@ solr/data
 config/sunspot.yml
 db/data.yml
 config/settings/custom.yml
+vendor/bundle
