@@ -12,7 +12,7 @@ class DropboxResearchObjectContainerController < ApplicationController
     respond_to do |format|
       if @dropbox_research_object_container.save
         flash[:success] = "Successfully added an ROs container folder"
-        redirect_to root_url
+        format.html { redirect_to root_url }
       else
         format.html { render :action => "new" }
       end

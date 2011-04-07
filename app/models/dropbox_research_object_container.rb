@@ -30,7 +30,6 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   belongs_to :dropbox_account
   
   has_many :sync_jobs
-  
 
   has_many :research_objects,
            :class_name => "ResearchObject",
@@ -40,6 +39,10 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   before_save :set_workspace_credentials
   after_save :ensure_workspace_exists_in_rosrs
   after_save :ensure_folder_exists_in_dropbox
+
+  def current_job_exists?
+    sync_jobs.exists? :status_code => [ SyncJob.statuses.pending, SyncJob.statuses.running ]
+  end
   
   def get_dropbox_session
     dropbox_account.get_dropbox_session

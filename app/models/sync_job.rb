@@ -46,7 +46,7 @@ class SyncJob < ActiveRecord::Base
              :foreign_key => "dropbox_research_object_container_id"
   
   serialize :stats, Hash
-  
+
   def started?
     !started_at.blank?
   end
