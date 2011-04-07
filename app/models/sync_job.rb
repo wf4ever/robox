@@ -108,10 +108,12 @@ class SyncJob < ActiveRecord::Base
   protected
   
   def start!
+    Util.say "SyncJob #{id} starting"
     update_attribute :started_at, Time.now
   end
   
   def finish!
+    Util.say "SyncJob #{id} finishing"
     update_attribute :finished_at, Time.now
   end
   
