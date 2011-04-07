@@ -8,8 +8,7 @@ class DropboxAccountsController < ApplicationController
       
       if dropbox_session.authorized?
         account_info = dropbox_session.account
-        ap account_info; puts
-        
+
         if account_info
         
           # Check if account is already registered, if not create it
