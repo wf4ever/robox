@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110405095020
+# Schema version: 20110407193210
 #
 # Table name: sync_jobs
 #
@@ -10,7 +10,6 @@
 #  created_at                           :datetime
 #  updated_at                           :datetime
 #  error_message                        :string(255)
-#  stats                                :text(16777215)
 #  dropbox_research_object_container_id :integer(4)
 #
 # Indexes
@@ -22,13 +21,15 @@
 class SyncJob < ActiveRecord::Base
   
   APPLICATION_OCTET_STREAM = "application/octet-stream"
+  
   as_enum :status,
           { :pending => "PENDING", 
             :running => "RUNNING", 
             :failed => "FAILED", 
             :success => "SUCCESS" },
           :upcase => true,
-          :column => 'status_code'
+          :column => 'status_code',
+          :slim => :class
           
   include DatabaseValidation
   
@@ -45,8 +46,6 @@ class SyncJob < ActiveRecord::Base
              :class_name => "DropboxResearchObjectContainer",
              :foreign_key => "dropbox_research_object_container_id"
   
-  serialize :stats, Hash
-
   def started?
     !started_at.blank?
   end
@@ -58,8 +57,7 @@ class SyncJob < ActiveRecord::Base
   def run
     unless started?
       ok = true
-      current_stats = { }
-      
+
       start!
       
       dropbox_account = ro_container.dropbox_account
@@ -78,18 +76,21 @@ class SyncJob < ActiveRecord::Base
         status = :failed
         add_error_message "Could not access workspace with ID '#{ro_container.workspace_id}' for ROs container with ID '#{ro_container.id}'"
         ok = false
-      end 
+      end
+      
       if ok
         begin
-          update_status! :running
+          status = :running
+          save!
+
           ro_container_metadata.contents.each do |entry|
             if entry.directory?
-              sync_ro(entry, dropbox_account, ro_container, workspace, stats)
+              sync_ro(entry, dropbox_account, ro_container, workspace)
             end
           end
           # TODO: Delete ROs now missing in dropbox
           
-          status = :success      
+          status = :success     
         rescue Exception => ex
           Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
           status = :failed
@@ -98,7 +99,6 @@ class SyncJob < ActiveRecord::Base
         end
       end
       
-      stats = current_stats
       save!
       
       finish!
@@ -117,17 +117,12 @@ class SyncJob < ActiveRecord::Base
     update_attribute :finished_at, Time.now
   end
   
-  def update_status!(new_status)
-    status = new_status
-    save!
-  end
-  
   def add_error_message(msg)
     error_message ||= ''
     error_message += "#{msg}\n\n"
   end
 
-  def sync_ro(ro_metadata, dropbox_account, ro_container, workspace, stats)
+  def sync_ro(ro_metadata, dropbox_account, ro_container, workspace)
     name = ro_metadata.path.gsub(/.*\//, "")
     ro_srs = workspace[name]
     if !ro_srs

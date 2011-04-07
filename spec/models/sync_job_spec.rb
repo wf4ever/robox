@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110405095020
+# Schema version: 20110407193210
 #
 # Table name: sync_jobs
 #
@@ -10,7 +10,6 @@
 #  created_at                           :datetime
 #  updated_at                           :datetime
 #  error_message                        :string(255)
-#  stats                                :text(16777215)
 #  dropbox_research_object_container_id :integer(4)
 #
 # Indexes
@@ -52,6 +51,15 @@ describe SyncJob do
       job_again.running?.should be_true
       job_again.failed?.should_not be_true
       job_again.success?.should_not be_true
+
+      job.status = :success
+      expect { job.save! }.to_not raise_error
+
+      job_again = SyncJob.find(job.id)
+      job_again.pending?.should_not be_true
+      job_again.running?.should_not be_true
+      job_again.failed?.should_not be_true
+      job_again.success?.should be_true
     end
     
   end
