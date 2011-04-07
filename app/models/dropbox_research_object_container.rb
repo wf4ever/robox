@@ -41,7 +41,7 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   after_save :ensure_folder_exists_in_dropbox
 
   def current_job_exists?
-    sync_jobs.exists? :status_code => [ SyncJob.statuses.pending, SyncJob.statuses.running ]
+    sync_jobs.exists? :status_code => [ SyncJob.statuses(:pending, :running) ]
   end
   
   def get_dropbox_session
