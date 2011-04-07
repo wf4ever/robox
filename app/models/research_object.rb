@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110405122455
+# Schema version: 20110406150131
 #
 # Table name: research_objects
 #
@@ -8,6 +8,7 @@
 #  created_at                           :datetime
 #  updated_at                           :datetime
 #  dropbox_research_object_container_id :integer(4)
+#  path                                 :string(255)     default("--unknown--"), not null
 #
 # Indexes
 #
