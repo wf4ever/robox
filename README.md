@@ -23,7 +23,7 @@ Check out the *doc* directory for some diagrams
 
 * `gem install bundler`
 * `git clone git://github.com/wf4ever/prototype1-dropbox.git`
-* `bundle`
+* `bundle --deployment`
 * Set up config/database.yml
 * Set up config/settings/custom.yml
 * `rake db:setup && rake db:migrate && rake db:seed`
@@ -59,6 +59,7 @@ To then submit a fresh batch of sync jobs:
 
 Follow the installation instructions above, except:
 * Do `git clone git@github.com:wf4ever/prototype1-dropbox.git` instead.
+* Run `bundle install` instead of `bundle --deployment`.
 * Don't do the Passenger and Apache set up.
 
 ### To run the tests
