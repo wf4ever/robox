@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/jits/database_validation.git
-  revision: d58427f7475afb98cb3ea65f62034b4595764ddc
-  specs:
-    database_validation (0.0.5)
-
-GIT
   remote: git://github.com/wf4ever/prototype1-dlibra-client-gem.git
   revision: 34c5fd5c93a3316d3759ce58611d31d76eb4e349
   specs:
@@ -88,6 +82,7 @@ GEM
     culerity (0.2.15)
     daemons (1.0.10)
     database_cleaner (0.6.6)
+    database_validation (0.0.6)
     default_value_for (1.0.1)
     delayed_job (2.1.4)
       activesupport (~> 3.0)
@@ -283,7 +278,7 @@ DEPENDENCIES
   cucumber
   cucumber-rails
   database_cleaner
-  database_validation (>= 0.0.5)!
+  database_validation (>= 0.0.6)
   default_value_for
   delayed_job
   delayed_job_admin
