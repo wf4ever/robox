@@ -188,7 +188,7 @@ class ApplicationController < ActionController::Base
           else
             connect_path
           end
-      @site_tabs[:add_ro_container] = build_site_tab_info("Add RO Container", add_ro_container_path)
+      @site_tabs[:add_ro_container] = build_site_tab_info("Add ROs Location", add_ro_container_path)
 
       # Sync Status
       @site_tabs[:sync_status] = build_site_tab_info("Sync Status", dashboard_sync_status_path)

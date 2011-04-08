@@ -2,4 +2,5 @@
   #site_tabs
     %ul
       - @site_tabs.each do |k,v|
-        %li{:class => "#{@selected_site_tab == k ? 'active' : ''}" }= link_to v.label, v.path
+        %li{:class => "#{@selected_site_tab == k ? 'active' : ''}" }
+          = link_to content_tag(:span, v.label), v.path

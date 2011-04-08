@@ -21,7 +21,7 @@ class HomeController < ApplicationController
     })
     
     step_data_2 = Hashie::Mash.new({
-      :text => "2. Specify an ROs container folder in your Dropbox",
+      :text => "2. Specify an ROs location in your Dropbox",
       :action_label => "GO",
     })
     
