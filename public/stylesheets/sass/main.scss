@@ -37,6 +37,14 @@ h1 {
   margin-bottom: 0.5em;
 }
 
+h2 {
+  @include font-size(16px);
+}
+
+h3 {
+  @include font-size(14px);
+}
+
 img, a img {
   border: none;
   margin: 0;
@@ -44,6 +52,10 @@ img, a img {
 
 .center {
   text-align: center;
+}
+
+.strong {
+  font-weight: bold;
 }
 
 .faded {

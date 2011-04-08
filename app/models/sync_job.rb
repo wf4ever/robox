@@ -48,12 +48,22 @@ class SyncJob < ActiveRecord::Base
               :class_name => "DropboxResearchObjectContainer",
               :foreign_key => "dropbox_research_object_container_id"
 
+  # TODO: there must be an easier and DRYer way to generate the scopes below!
+  
   scope :pending, lambda {
     where(:status_code => SyncJob.statuses.pending)
   }
 
+  scope :running, lambda {
+    where(:status_code => SyncJob.statuses.running)
+  }
+
   scope :failed, lambda {
     where(:status_code => SyncJob.statuses.failed)
+  }
+
+  scope :success, lambda {
+    where(:status_code => SyncJob.statuses.success)
   }
 
   def started?

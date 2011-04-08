@@ -281,12 +281,21 @@ h1 {
   font-size: 154%;
   margin-bottom: 0.5em; }
 
+h2 {
+  font-size: 124%; }
+
+h3 {
+  font-size: 108%; }
+
 img, a img {
   border: none;
   margin: 0; }
 
 .center {
   text-align: center; }
+
+.strong {
+  font-weight: bold; }
 
 .faded, .none_text {
   color: #777; }

@@ -1,7 +1,7 @@
 /* Based on the original flutie.css BUT with bits removed 
- * (to avoid major conflicts with the other stylsheets)
+ * (to avoid major conflicts with the other stylesheets)
  * 
- * NOTE: no additions should be made here, on removals!
+ * NOTE: no additions should be made here, only removals!
  */
 
 h1, h2, h3, h4, h5, h6 {
@@ -11,9 +11,16 @@ h1, h2, h3, h4, h5, h6 {
 /* Success, error & notice boxes for messages and errors. */
 div.error, div.notice, div.success,
 #flash_failure, #flash_success, #flash_notice {
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 0.3em; }
+
+#flash_failure, #flash_success, #flash_notice {
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
-  border: 1px solid #ddd;
+  border-radius: 8px;
   margin-bottom: 1em;
   padding: 0.8em; }
 
