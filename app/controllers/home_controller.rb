@@ -28,13 +28,13 @@ class HomeController < ApplicationController
     step_data_3 = Hashie::Mash.new({
       :text => "3. Wait for the app to sync",
       :action_label => "Status",
-      :action_path => ""
+      :action_path => dashboard_sync_status_path
     })
     
     step_data_4 = Hashie::Mash.new({
       :text => "Ready! View your Dashboard",
       :action_label => "Dashboard",
-      :action_path => ""
+      :action_path => dashboard_path
     })
     
     if user_signed_in? and current_user.has_a_dropbox_account?

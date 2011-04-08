@@ -191,10 +191,10 @@ class ApplicationController < ActionController::Base
       @site_tabs[:add_ro_container] = build_site_tab_info("Add RO Container", add_ro_container_path)
 
       # Sync Status
-      @site_tabs[:sync_status] = build_site_tab_info("Sync Status", "/pending")
+      @site_tabs[:sync_status] = build_site_tab_info("Sync Status", dashboard_sync_status_path)
 
       # Dashboard
-      @site_tabs[:dashboard] = build_site_tab_info("Dashboard", "/pending")
+      @site_tabs[:dashboard] = build_site_tab_info("Dashboard", dashboard_path)
       
       @site_tabs.freeze
     end
