@@ -1,4 +1,25 @@
 = title "Dashboard"
 
 .buttons
-  
+  = button 'Sync Status', dashboard_sync_status_path
+
+- current_user.main_dropbox_account.ro_containers.each do |container|
+  .ro_container.box_description
+    %h2
+      ROs Container:
+      = container.path
+    %div
+      %h3
+        Research Objects
+        %span.count_text
+          = "(#{container.research_objects.length})"
+      - container.research_objects.each do |ro|
+        .box_grouped_info
+          %h4.left
+            = ro.name  # Should use title here instead
+          %table
+            %tr
+              %td.strong
+                Path in Dropbox
+              %td
+                = ro.path

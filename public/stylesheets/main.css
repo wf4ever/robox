@@ -291,8 +291,14 @@ img, a img {
   border: none;
   margin: 0; }
 
+.left {
+  text-align: left; }
+
 .center {
   text-align: center; }
+
+.right {
+  text-align: right; }
 
 .strong {
   font-weight: bold; }
@@ -724,7 +730,7 @@ form.sign_up_main {
 .box_grouped_info {
   color: #333333;
   border: 1px solid #DDD;
-  background: #F5F5F5;
+  background: #F7F7F7;
   padding: 0.3em 0.6em;
   margin-bottom: 1em;
   line-height: 1.7; }
@@ -733,7 +739,8 @@ form.sign_up_main {
   border: 0;
   border-left: 4px solid #DDD;
   padding: 1em 0 1em 1em;
-  margin-left: 1em; }
+  margin-left: 1em;
+  margin-bottom: 1em; }
 
 .box_currentuser_specific {
   padding: 1em 1.5em;
