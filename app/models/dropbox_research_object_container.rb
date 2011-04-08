@@ -41,11 +41,15 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   after_save :ensure_folder_exists_in_dropbox
 
   def current_job_exists?
-    sync_jobs.exists? :status_code => [ SyncJob.statuses(:pending, :running) ]
+    self.sync_jobs.exists? :status_code => [ SyncJob.statuses(:pending, :running) ]
+  end
+
+  def pending_jobs_to_resubmit
+    self.sync_jobs.pending.where("#{SyncJob.table_name}.created_at < ?", Settings.sync.pending_jobs_resubmit_after.minutes.ago)
   end
   
   def get_dropbox_session
-    dropbox_account.get_dropbox_session
+    self.dropbox_account.get_dropbox_session
   end
   
   def dropbox_metadata

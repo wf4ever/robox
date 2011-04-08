@@ -14,3 +14,6 @@ rosrs:
   base_uri: "{{..}}"
   admin_username: "{{..}}"
   admin_password: "{{..}}"
+
+sync:
+  pending_jobs_resubmit_after: 15  # In minutes

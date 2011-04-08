@@ -47,7 +47,15 @@ class SyncJob < ActiveRecord::Base
   belongs_to :ro_container,
               :class_name => "DropboxResearchObjectContainer",
               :foreign_key => "dropbox_research_object_container_id"
-  
+
+  scope :pending, lambda {
+    where(:status_code => SyncJob.statuses.pending)
+  }
+
+  scope :failed, lambda {
+    where(:status_code => SyncJob.statuses.failed)
+  }
+
   def started?
     !self.started_at.blank?
   end
