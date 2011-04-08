@@ -69,25 +69,26 @@ class SyncJob < ActiveRecord::Base
       ok = true
 
       start!
+
+      begin
       
-      # Check that the RO container folder still exists
-      ro_container_metadata = ro_container.dropbox_metadata
-      if ro_container_metadata.blank?
-        self.status = :failed
-        add_error_message "Could not access the ROs container with ID '#{ro_container.id}' and path  '#{ro_container.path}'"
-        ok = false
-      end
-      
-      # Check workspace is available
-      workspace = ro_container.get_workspace
-      if workspace.blank?
-        self.status = :failed
-        add_error_message "Could not access workspace with ID '#{ro_container.workspace_id}' for ROs container with ID '#{ro_container.id}'"
-        ok = false
-      end
-      
-      if ok
-        begin
+        # Check that the RO container folder still exists
+        ro_container_metadata = ro_container.dropbox_metadata
+        if ro_container_metadata.blank?
+          self.status = :failed
+          add_error_message "Could not access the ROs container with ID '#{ro_container.id}' and path  '#{ro_container.path}'"
+          ok = false
+        end
+
+        # Check workspace is available
+        workspace = ro_container.get_workspace
+        if workspace.blank?
+          self.status = :failed
+          add_error_message "Could not access workspace with ID '#{ro_container.workspace_id}' for ROs container with ID '#{ro_container.id}'"
+          ok = false
+        end
+
+        if ok
           update_status! :running
 
           ro_container_metadata.contents.each do |entry|
@@ -95,16 +96,16 @@ class SyncJob < ActiveRecord::Base
               sync_ro(entry, workspace)
             end
           end
-          
+
           # TODO: Delete ROs now missing in dropbox
-          
+
           self.status = :success
-        rescue Exception => ex
-          Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
-          self.status = :failed
-          add_error_message "A fatal error occurred during sync. See logs for exception details."
-          ok = false
         end
+
+      rescue Exception => ex
+        Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
+        self.status = :failed
+        add_error_message "An unknown error occurred during sync. See logs for exception details."
       end
       
       save!
