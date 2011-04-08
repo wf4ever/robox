@@ -18,6 +18,8 @@ namespace :robox do
       else
         # Only resubmit the last pending job
         sync_job = pending_jobs.first
+        sync_job.started_at, sync_job.finished_at = nil
+        sync_job.save!
         sync_job.delay.run
         Util.say "Resubmitted an existing SyncJob (ID: #{sync_job.id}) for DropboxResearchObjectContainer with ID '#{c.id}'"
       end
