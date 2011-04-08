@@ -11,12 +11,12 @@
           %td.strong
             Initial Sync
           %td
-            - if container.sync_jobs.success.count > 0
+            - if container.initial_sync_success?
               .success
                 An initial sync has been done successfully
             - else
               .notice
-                Still waiting for an initial sync to be done
+                Still waiting for an initial sync to complete successfully
         %tr
           %td.strong
             Last Sync

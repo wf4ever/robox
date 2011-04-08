@@ -65,5 +65,5 @@ class DropboxAccount < ActiveRecord::Base
   def has_an_ro_container?
     return ro_containers.count > 0
   end
-  
+
 end

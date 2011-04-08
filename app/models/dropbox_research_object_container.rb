@@ -81,6 +81,10 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
       return nil
     end
   end
+
+  def initial_sync_success?
+    sync_jobs.success.count > 0
+  end
   
   protected
   

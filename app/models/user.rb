@@ -91,8 +91,7 @@ class User < ActiveRecord::Base
   
   def initially_synced?
     if has_an_ro_container?
-      # TODO: check that an initial sync was established
-      return false
+      return main_dropbox_account.ro_containers.first.initial_sync_success?
     else
       return false
     end
