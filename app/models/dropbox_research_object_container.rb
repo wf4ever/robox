@@ -29,7 +29,8 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   
   belongs_to :dropbox_account
   
-  has_many :sync_jobs
+  has_many :sync_jobs,
+            :dependent => :destroy
 
   has_many :research_objects,
            :class_name => "ResearchObject",
