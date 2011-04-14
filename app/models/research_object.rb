@@ -31,7 +31,8 @@ class ResearchObject < ActiveRecord::Base
              :class_name => "DropboxResearchObjectContainer",
              :foreign_key => "dropbox_research_object_container_id"
   
-  has_many :dropbox_entries
+  has_many :dropbox_entries,
+           :dependent => :destroy
   
   has_many :children,
            :class_name => "DropboxEntry",

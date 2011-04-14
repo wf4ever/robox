@@ -57,7 +57,8 @@ class DropboxEntry < ActiveRecord::Base
 
   has_many :children,
            :class_name => "DropboxEntry",
-           :foreign_key => "parent_id"
+           :foreign_key => "parent_id",
+           :dependent => :destroy
              
   protected
   
