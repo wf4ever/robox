@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/wf4ever/prototype1-dlibra-client-gem.git
-  revision: 34c5fd5c93a3316d3759ce58611d31d76eb4e349
+  revision: e07964f5ac7636eee87be30c6c9677954bdc0dcf
   specs:
-    dlibra_client (0.0.2)
+    dlibra_client (0.0.3)
       rdf (~> 0.3)
       rdf-rdfxml (~> 0.3)
 
@@ -283,7 +283,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_admin
   devise (~> 1.1.3)
-  dlibra_client (~> 0.0.2)!
+  dlibra_client (~> 0.0.3)!
   dropbox (~> 1.2.3)
   dummy_dropbox
   evergreen
