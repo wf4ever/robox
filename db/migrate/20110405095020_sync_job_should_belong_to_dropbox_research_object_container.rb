@@ -8,13 +8,13 @@ class SyncJobShouldBelongToDropboxResearchObjectContainer < ActiveRecord::Migrat
       t.belongs_to :dropbox_research_object_container
     end
     
-    add_index :sync_jobs, :dropbox_research_object_container_id
-    add_index :sync_jobs, [ :dropbox_research_object_container_id, :status_code ], :name => "index_sync_jobs_on_dbox_ro_container_id_and_status"
+    #add_index :sync_jobs, :dropbox_research_object_container_id
+    #add_index :sync_jobs, [ :dropbox_research_object_container_id, :status_code ], :name => "index_sync_jobs_on_dbox_ro_container_id_and_status"
   end
 
   def self.down
-    remove_index :sync_jobs, :dropbox_research_object_container_id
-    remove_index :sync_jobs, [ :dropbox_research_object_container_id, :status_code ], :name => "index_sync_jobs_on_dbox_ro_container_id_and_status"
+    #remove_index :sync_jobs, :dropbox_research_object_container_id
+    #remove_index :sync_jobs, :name => "index_sync_jobs_on_dbox_ro_container_id_and_status"
     
     change_table :sync_jobs do |t|
       t.remove :dropbox_research_object_container
