@@ -459,7 +459,7 @@ img, a img {
 #site_tabs ul {
   margin: 0;
   font-weight: bold;
-  font-size: 100%; }
+  font-size: 93%; }
   #site_tabs ul li {
     margin: 0;
     margin-bottom: 0.5em;
@@ -485,7 +485,7 @@ img, a img {
       border: solid 1px #afbbd2;
       border-right: solid 1px #667b99;
       background-color: #667b99;
-      padding: 0 1em;
+      padding: 0 0.6em;
       display: block;
       text-align: right;
       height: 36px;
@@ -581,7 +581,7 @@ img, a img {
 
 /* awesome buttons extensions */
 .awesome.regular {
-  background-color: #234c23 !important; }
+  background-color: #258225 !important; }
 
 .awesome.blue {
   background-color: #0A50FF !important; }

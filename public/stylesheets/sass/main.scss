@@ -268,7 +268,7 @@ img, a img {
   ul {
     margin: 0;
     font-weight: bold;
-    @include font-size(13px);
+    @include font-size(12px);
     
     li {
       margin: 0;
@@ -286,7 +286,7 @@ img, a img {
         border: solid 1px $main-border-color;
         border-right: solid 1px $tab-background-color;
         background-color: $tab-background-color;
-        padding: 0 1em;
+        padding: 0 0.6em;
         display: block;
         text-align: right;
         height: 36px;

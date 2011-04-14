@@ -6,8 +6,12 @@ class DashboardController < ApplicationController
 
   end
 
-  def sync_status
-    
+  def ros
+
+  end
+
+  def dropbox
+
   end
 
 end

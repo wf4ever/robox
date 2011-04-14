@@ -1,4 +1,7 @@
-= title "Sync Status"
+= title "Dropbox Connections Dashboard"
+
+.buttons
+  = button 'Add a location in your Dropbox that contains many ROs', add_ro_container_path
 
 - current_user.main_dropbox_account.ro_containers.each do |container|
   .ro_container.box_description

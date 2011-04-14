@@ -21,20 +21,23 @@ class HomeController < ApplicationController
     })
     
     step_data_2 = Hashie::Mash.new({
-      :text => "2. Specify an ROs location in your Dropbox",
+      :text => "2. Specify a location in your Dropbox to find/store ROs",
       :action_label => "GO",
     })
+
+    # TODO: add another step here to tell the users to add ROs + content
+    # and then maybe get the user to explicitly to allow sync to happen
     
     step_data_3 = Hashie::Mash.new({
       :text => "3. Wait for the app to sync",
       :action_label => "Status",
-      :action_path => dashboard_sync_status_path
+      :action_path => "TODO"
     })
     
     step_data_4 = Hashie::Mash.new({
-      :text => "Ready! View your Dashboard",
-      :action_label => "Dashboard",
-      :action_path => dashboard_path
+      :text => "Ready! View your Research Objects",
+      :action_label => "ROs Dashboard",
+      :action_path => dashboard_ros_path
     })
     
     if user_signed_in? and current_user.has_a_dropbox_account?
