@@ -39,14 +39,16 @@ class ResearchObject < ActiveRecord::Base
            :foreign_key => "research_object_id",
            :conditions => { :parent_id => nil }
 
-  belongs_to :content_blob
+  belongs_to :content_blob,
+              :autosave => true
 
   def manifest
     self.content_blob.try(:content)
   end
 
   def manifest=(content)
-    self.content_blob.build(:content => content)
+    self.build_content_blob
+    self.content_blob.content = content
   end
 
 end
