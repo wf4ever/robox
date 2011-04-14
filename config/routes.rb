@@ -1,5 +1,7 @@
 Wf4EverDropboxConnector::Application.routes.draw do
 
+  match 'ros_help' => 'home#ros_help'
+
   match 'dashboard' => 'dashboard#show'
   match 'dashboard/ros' => 'dashboard#ros'
   match 'dashboard/dropbox' => 'dashboard#dropbox'

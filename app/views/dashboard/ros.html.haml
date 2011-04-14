@@ -1,22 +1,21 @@
 = title "Research Objects Dashboard"
 
-- current_user.main_dropbox_account.ro_containers.each do |container|
+- if @research_objects.blank?
+  %p.box_info_standout
+    You have no Research Objects at the moment.
+    Go to the
+    = link_to "Getting Started", root_path
+    for more info
+  
+- @research_objects.each do |ro|
   .ro_container.box_description
     %h2
-      ROs Location:
-      = container.path
+      RO:
+      = ro.name
     %div
-      %h3
-        Research Objects
-        %span.count_text
-          = "(#{container.research_objects.length})"
-      - container.research_objects.each do |ro|
-        .box_grouped_info
-          %h4.left
-            = ro.name  # Should use title here instead
-          %table
-            %tr
-              %td.strong
-                Path in Dropbox
-              %td
-                = ro.path
+      %table
+        %tr
+          %td.strong
+            Path in Dropbox
+          %td
+            = ro.path

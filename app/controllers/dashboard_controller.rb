@@ -7,7 +7,7 @@ class DashboardController < ApplicationController
   end
 
   def ros
-
+    @research_objects = current_user.all_research_objects
   end
 
   def dropbox

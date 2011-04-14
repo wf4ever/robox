@@ -1,50 +1,79 @@
 = title "Dropbox Connections Dashboard"
 
-.buttons
-  = button 'Add a location in your Dropbox that contains many ROs', add_ro_container_path
-
-- current_user.main_dropbox_account.ro_containers.each do |container|
-  .ro_container.box_description
-    %h2
-      ROs Container:
-      = container.path
-    %div
-      %table
-        %tr
-          %td.strong
-            Initial Sync
-          %td
-            - if container.initial_sync_success?
-              .success
-                An initial sync has been done successfully
-            - else
-              .notice
-                Still waiting for an initial sync to complete successfully
-        %tr
-          %td.strong
-            Last Sync
-          %td
-            - last_job = container.sync_jobs.last
-            - if last_job.nil?
-              .notice
-                Not synced yet
-            - else
-              %div{ :class => class_name_for_sync_status(last_job.status) }
-                = last_job.status.to_s.upcase
-        %tr
-          %td.strong
-            All Sync Jobs
-          %td
-            %p
-              Pending jobs:
-              = container.sync_jobs.pending.count
-            %p
-              Running jobs:
-              = container.sync_jobs.running.count
-            %p
-              Failed jobs:
-              = container.sync_jobs.failed.count
-            %p
-              Successful jobs:
-              = container.sync_jobs.success.count
-        
+.tab-container
+  %ul
+    %li
+      %a{ :href => "#accounts" }
+        Dropbox Accounts
+    %li
+      %a{ :href => "#sync_status" }
+        Sync Status
+  .panel-container
+    #accounts
+      - current_user.dropbox_accounts.each do |account|
+        .dropbox_account.box_description
+          %h2
+            Dropbox Account
+          %div
+            %table
+              %tr
+                %td.strong
+                  Owner name:
+                %td
+                  = account.owner_name
+              %tr
+                %td.strong
+                  Owner email:
+                %td
+                  = account.owner_email
+          .buttons
+            = button 'Add a location in this Dropbox that stores ROs', new_dropbox_account_ro_container_path(account)
+    #sync_status
+      - current_user.dropbox_accounts.each do |account|
+        %h2
+          Dropbox account for:
+          = account.owner_name
+        - account.ro_containers.each do |container|
+          .ro_container.box_description
+            %h3
+              ROs Location:
+              = container.path
+            %div
+              %table
+                %tr
+                  %td.strong
+                    Initial Sync
+                  %td
+                    - if container.initial_sync_success?
+                      .success
+                        An initial sync has been done successfully
+                    - else
+                      .notice
+                        Still waiting for an initial sync to complete successfully
+                %tr
+                  %td.strong
+                    Last Sync
+                  %td
+                    - last_job = container.sync_jobs.last
+                    - if last_job.nil?
+                      .notice
+                        Not synced yet
+                    - else
+                      %div{ :class => class_name_for_sync_status(last_job.status) }
+                        = last_job.status.to_s.upcase
+                %tr
+                  %td.strong
+                    All Sync Jobs
+                  %td
+                    %p
+                      Pending jobs:
+                      = container.sync_jobs.pending.count
+                    %p
+                      Running jobs:
+                      = container.sync_jobs.running.count
+                    %p
+                      Failed jobs:
+                      = container.sync_jobs.failed.count
+                    %p
+                      Successful jobs:
+                      = container.sync_jobs.success.count

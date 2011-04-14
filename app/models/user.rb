@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   
   has_many :dropbox_accounts, 
            :dependent => :destroy
-  
+
   def role?(role)
     return !!self.roles.find_by_name( Role.sanitize role )
   end
@@ -83,18 +83,22 @@ class User < ActiveRecord::Base
   
   def has_an_ro_container?
     if has_a_dropbox_account?
-      return main_dropbox_account.has_an_ro_container?
+      main_dropbox_account.has_an_ro_container?
     else
-      return false
+      false
     end
   end
   
-  def initially_synced?
+  def initial_ro_synced?
     if has_an_ro_container?
-      return main_dropbox_account.ro_containers.first.initial_sync_success?
+      main_dropbox_account.ro_containers.first.research_objects.count > 0
     else
-      return false
+      false
     end
+  end
+
+  def all_research_objects
+    dropbox_accounts.collect { |d| d.research_objects }.flatten
   end
 
 end

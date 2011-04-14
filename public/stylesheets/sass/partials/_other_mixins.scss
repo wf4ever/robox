@@ -26,6 +26,15 @@
   -webkit-border-bottom-left-radius: $size;
 }
 
+@mixin top-rounded($size) {
+  border-top-left-radius: $size;
+  border-top-right-radius: $size;
+  -moz-border-radius-topleft: $size;
+  -moz-border-radius-topright: $size;
+  -webkit-border-top-left-radius: $size;
+  -webkit-border-top-right-radius: $size;
+}
+
 @mixin shadowed($h-offset=1px, $v-offset=1px, $blur-radius=3px, $colour=#CCC) {
   -moz-box-shadow: $h-offset $v-offset $blur-radius $colour;
   -webkit-box-shadow: $h-offset $v-offset $blur-radius $colour;
