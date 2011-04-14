@@ -10,7 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110407193210) do
+ActiveRecord::Schema.define(:version => 20110414095655) do
+
+  create_table "content_blobs", :force => true do |t|
+    t.binary   "content",    :limit => 16777215, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -72,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20110407193210) do
     t.datetime "updated_at"
     t.integer  "dropbox_research_object_container_id"
     t.string   "path",                                 :default => "--unknown--", :null => false
+    t.integer  "content_blob_id"
   end
 
   add_index "research_objects", ["dropbox_research_object_container_id", "name"], :name => "index_research_objects_on_dbox_ro_container_id_and_name", :unique => true

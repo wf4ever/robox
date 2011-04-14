@@ -37,5 +37,21 @@ describe ResearchObject do
     end
     
   end
+
+  describe "manifest" do
+
+    it "should set and read the manifest as expected" do
+      ro = Factory.create(:research_object)
+
+      manifest_contents = "Hellow World!"
+
+      ro.manifest = manifest_contents
+      expect { ro.save! }.to_not raise_error
+
+      ro_again = ResearchObject.find(ro.id)
+      ro_again.manifest.should == manifest_contents
+    end
+
+  end
   
 end
