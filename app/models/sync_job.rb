@@ -174,6 +174,9 @@ class SyncJob < ActiveRecord::Base
     manifest_content = version_srs.manifest_rdf
     manifest_path = ro_metadata.path + "/"
     dropbox_session.upload(StringIO.new(manifest_content), manifest_path, :as => "manifest.rdf")
+
+    ro_model.manifest = manifest_content
+    ro_model.save!
   end
 	  
 	 

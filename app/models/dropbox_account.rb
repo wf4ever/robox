@@ -27,7 +27,9 @@ class DropboxAccount < ActiveRecord::Base
                   :user,
                   :dropbox_user_id,
                   :access_token,
-                  :access_secret
+                  :access_secret,
+                  :owner_name,
+                  :owner_email
   
   validates :user,
             :existence => true
@@ -39,7 +41,10 @@ class DropboxAccount < ActiveRecord::Base
            :class_name => "DropboxResearchObjectContainer",
            :foreign_key => "dropbox_account_id",
            :dependent => :destroy
-  
+
+  has_many :research_objects,
+            :through => :ro_containers
+
   def dropbox_research_object_containers
     ro_containers
   end

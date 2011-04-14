@@ -182,19 +182,22 @@ class ApplicationController < ActionController::Base
       @site_tabs[:getting_started] = build_site_tab_info("Getting Started", root_path)
 
       # Add RO Container
-      add_ro_container_path =
-          if user_signed_in? && current_user.has_a_dropbox_account?
-            new_dropbox_account_ro_container_path(current_user.main_dropbox_account)
-          else
-            connect_path
-          end
-      @site_tabs[:add_ro_container] = build_site_tab_info("Add ROs Location", add_ro_container_path)
+      #add_ro_container_path =
+      #    if user_signed_in? && current_user.has_a_dropbox_account?
+      #      new_dropbox_account_ro_container_path(current_user.main_dropbox_account)
+      #    else
+      #      connect_path
+      #    end
+      #@site_tabs[:add_ro_container] = build_site_tab_info("Add ROs Location", add_ro_container_path)
 
       # Sync Status
-      @site_tabs[:sync_status] = build_site_tab_info("Sync Status", dashboard_sync_status_path)
+      #@site_tabs[:sync_status] = build_site_tab_info("Sync Status", dashboard_sync_status_path)
 
-      # Dashboard
-      @site_tabs[:dashboard] = build_site_tab_info("Dashboard", dashboard_path)
+      # My Research Objects
+      @site_tabs[:ros_dashboard] = build_site_tab_info("My Research Objects", dashboard_ros_path)
+
+      # Dropbox Connections
+      @site_tabs[:dropbox_dashboard] = build_site_tab_info("Dropbox Connections", dashboard_dropbox_path)
       
       @site_tabs.freeze
     end

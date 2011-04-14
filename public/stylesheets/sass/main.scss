@@ -268,7 +268,7 @@ img, a img {
   ul {
     margin: 0;
     font-weight: bold;
-    @include font-size(13px);
+    @include font-size(12px);
     
     li {
       margin: 0;
@@ -286,7 +286,7 @@ img, a img {
         border: solid 1px $main-border-color;
         border-right: solid 1px $tab-background-color;
         background-color: $tab-background-color;
-        padding: 0 1em;
+        padding: 0 0.6em;
         display: block;
         text-align: right;
         height: 36px;
@@ -304,7 +304,7 @@ img, a img {
       }
       
       a:hover {
-        background-color: #5a87dd;
+        background-color: $tab-hover-background-color;
       }
     }
     
@@ -403,6 +403,7 @@ img, a img {
   
   .step_text {
     @include font-size(14px);
+    line-height: 1.5;
   }
   
   tr.pending {
@@ -426,6 +427,11 @@ img, a img {
 
 
 /* awesome buttons extensions */
+
+.button {
+  line-height: 1.5;
+}
+
 .awesome.regular {
   background-color: $button-background-color !important;
 }
@@ -630,47 +636,72 @@ form.sign_up_main {
 /* BEGIN content tabs styles */
 
 .tab-container {
-  background-color: #FFF;
-  border: solid 1px #CCC; 
-  height: 600px; 
+  margin-bottom: 1em;
   
   ul { 
-    height: 600px; 
-    list-style: none; 
+    list-style: none;
     margin: 0; 
     padding: 0; 
-    background: $content-background-color; 
-    float: left; 
-    border-right: solid 1px #CCC; 
-    
+    border-bottom: solid 1px #BBB;
+    font-weight: bold;
+    line-height: 20px;
+    padding-bottom: 1px;
+
     li { 
-      width: 100px; 
-      margin: 0; 
+      margin: 0;
       padding: 0; 
       text-align: center;
+      list-style: none;
+      list-style-image: none;
+      display: inline;
       
-      a { 
-        display: block; 
-        padding: 15px 0; 
-        outline: none; 
+      a:link,
+      a:visited {
+        @include top-rounded(6px);
+        color: #FFF;
+        background-color: $tab-background-color;
+        outline: none;
+        padding: 3px 0.7em;
+        margin: 0;
+        margin-right: 5px;
+        border: 1px solid #DDD;
+        border-bottom: none;
+        text-decoration: none;
+        -webkit-transition: background-color 0.3s linear;
+        -moz-transition: background-color 0.3s linear;
+        -o-transition: background-color 0.3s linear;
+        vertical-align: middle;
+
+        * {
+          vertical-align: middle;
+        }
       }
       
       a:hover { 
-        text-decoration: underline; 
+        border-color: #BBB;
       }
       
       a.selected-tab { 
-        font-weight: bold; 
-        text-decoration: none; 
+        text-decoration: none;
       }
     }
     
-    li.selected-tab { 
-      background: #fff; 
-      position: relative; 
-      left: 1px; 
-      border: 0 solid #CCC; 
-      border-width: 1px 0; 
+    li.selected-tab {
+      z-index: 3;
+
+      a:link,
+      a:visited {
+        border: 1px solid #BBB;
+	      border-bottom: 2px solid $content-background-color;
+        color: $link-color;
+        -webkit-transition: background-color 0.2s linear;
+        background-color: $content-background-color;
+      }
+
+      a:hover {
+        color: #000;
+	      background-color: $content-background-color;
+      }
     }
     
     li:first-child.selected-tab { 
@@ -679,8 +710,14 @@ form.sign_up_main {
   }
   
   .panel-container { 
-    padding: 1em 1.2em 0.7em 120px; 
-    background-color: #FFF;
+    background-color: $content-background-color;
+    padding: 1em;
+    border: 1px solid #BBB;
+    border-top: 0;
+    /*-moz-box-shadow: 1px 1px 1px #999;
+    -webkit-box-shadow: 1px 1px 1px #999;
+    box-shadow: 1px 1px 1px #999;*/
+    @include shadowed
   }
 }
 

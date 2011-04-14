@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110414095655) do
+ActiveRecord::Schema.define(:version => 20110414154000) do
 
   create_table "content_blobs", :force => true do |t|
     t.binary   "content",    :limit => 16777215, :null => false
@@ -34,12 +34,14 @@ ActiveRecord::Schema.define(:version => 20110414095655) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "dropbox_accounts", :force => true do |t|
-    t.integer  "user_id",         :null => false
-    t.string   "dropbox_user_id", :null => false
-    t.string   "access_token",    :null => false
-    t.string   "access_secret",   :null => false
+    t.integer  "user_id",                                            :null => false
+    t.string   "dropbox_user_id",                                    :null => false
+    t.string   "access_token",                                       :null => false
+    t.string   "access_secret",                                      :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "owner_name",      :default => "Unknown",             :null => false
+    t.string   "owner_email",     :default => "unknown@example.com", :null => false
   end
 
   add_index "dropbox_accounts", ["dropbox_user_id"], :name => "index_dropbox_accounts_on_dropbox_user_id"

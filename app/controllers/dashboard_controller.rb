@@ -6,8 +6,12 @@ class DashboardController < ApplicationController
 
   end
 
-  def sync_status
-    
+  def ros
+    @research_objects = current_user.all_research_objects
+  end
+
+  def dropbox
+
   end
 
 end

@@ -1,7 +1,10 @@
 Wf4EverDropboxConnector::Application.routes.draw do
 
+  match 'ros_help' => 'home#ros_help'
+
   match 'dashboard' => 'dashboard#show'
-  match 'dashboard/sync_status' => 'dashboard#sync_status'
+  match 'dashboard/ros' => 'dashboard#ros'
+  match 'dashboard/dropbox' => 'dashboard#dropbox'
 
   resources :dropbox_accounts do
     resources :ro_containers, :controller => "DropboxResearchObjectContainer"
