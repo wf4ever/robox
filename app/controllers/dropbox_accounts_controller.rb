@@ -20,13 +20,13 @@ class DropboxAccountsController < ApplicationController
             account = DropboxAccount.new(:dropbox_user_id => account_info.uid,
                                          :access_token => access_token.token,
                                          :access_secret => access_token.secret)
-            
+
             account.owner_name = account_info.display_name
             account.owner_email = account_info.email
-            
-            account.save!
+
 
             account.setup_user!(account_info)
+            account.save!
             
             flash[:success] = "Successfully set up your account. Welcome #{account.user.name}"
           else
