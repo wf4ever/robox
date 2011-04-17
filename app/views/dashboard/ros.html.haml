@@ -53,6 +53,23 @@
         %table
           %tr
             %td.strong
+              In ROs Location
+            %td
+              = ro.ro_container.path
+          %tr
+            %td.strong
               Path in Dropbox
             %td
               = ro.path
+          %tr
+            %td.strong
+              Last Sync
+            %td
+              - last_job = container.sync_jobs.last
+              - if last_job.nil?
+                .notice
+                  Not synced yet
+              - else
+                %div{ :class => class_name_for_sync_status(last_job.status) }
+                  = last_job.status.to_s.upcase
+                  = "(#{last_job.updated_at.to_s})"

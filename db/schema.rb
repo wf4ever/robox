@@ -131,9 +131,6 @@ ActiveRecord::Schema.define(:version => 20110417211838) do
     t.integer  "dropbox_research_object_container_id"
   end
 
-  add_index "sync_jobs", ["dropbox_research_object_container_id", "status_code"], :name => "index_sync_jobs_on_dbox_ro_container_id_and_status"
-  add_index "sync_jobs", ["dropbox_research_object_container_id"], :name => "index_sync_jobs_on_dropbox_research_object_container_id"
-
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "", :null => false
     t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
