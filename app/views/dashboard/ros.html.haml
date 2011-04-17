@@ -46,7 +46,7 @@
                     %span.none_text
                       nothing yet
                   - else
-                    = build_tree_for_ro_contents(ro)
+                    = render :partial => 'research_objects/contents_tree', :locals => { :ro => ro }
       .box_indented_with_bar
         %h3.left
           Dropbox info

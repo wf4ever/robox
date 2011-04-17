@@ -12,11 +12,9 @@ $(document).ready(function() {
 
 
 $(document).ready(function(){
-
 	$("ul.ro_contents").treeview({
 		persist: "location",
 		collapsed: true,
 		unique: true
 	});
-
 });

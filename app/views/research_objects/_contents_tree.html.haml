@@ -1,0 +1,8 @@
+- # TODO: right now this just uses the cached info
+- # on the ResearchObject and DropboxEntries, but for future
+- # need to include info from the manifest too, like
+- # the link in dLibra, annotations, etc.
+
+%ul.ro_contents.filetree
+  - ro.children.each do |entry|
+    = render :partial => 'research_objects/contents_tree/entry', :locals => { :entry => entry }

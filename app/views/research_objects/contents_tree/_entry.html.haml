@@ -1,0 +1,13 @@
+- case entry.entry_type
+- when :file
+  %li
+    %span.file= entry.name
+- when :manifest
+  %li
+    %span.file.manifest= entry.name
+- when :directory
+  %li
+    %span.folder= entry.name
+    %ul
+      - entry.children.each do |inner_entry|
+        = render :partial => 'research_objects/contents_tree/entry', :locals => { :entry => inner_entry }
