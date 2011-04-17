@@ -38,7 +38,8 @@ class ResearchObject < ActiveRecord::Base
   has_many :children,
            :class_name => "DropboxEntry",
            :foreign_key => "research_object_id",
-           :conditions => { :parent_id => nil }
+           :conditions => { :parent_id => nil },
+           :order => "dropbox_entries.name ASC"
 
   belongs_to :content_blob,
               :autosave => true

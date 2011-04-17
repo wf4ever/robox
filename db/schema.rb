@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110417193930) do
+ActiveRecord::Schema.define(:version => 20110417211838) do
 
   create_table "content_blobs", :force => true do |t|
     t.binary   "content",    :limit => 16777215, :null => false
@@ -48,14 +48,15 @@ ActiveRecord::Schema.define(:version => 20110417193930) do
   add_index "dropbox_accounts", ["user_id"], :name => "index_dropbox_accounts_on_user_id"
 
   create_table "dropbox_entries", :force => true do |t|
-    t.integer  "research_object_id", :null => false
-    t.string   "path",               :null => false
-    t.string   "entry_type_code",    :null => false
+    t.integer  "research_object_id",                          :null => false
+    t.string   "path",                                        :null => false
+    t.string   "entry_type_code",                             :null => false
     t.integer  "parent_id"
     t.string   "hash"
-    t.integer  "revision",           :null => false
+    t.integer  "revision",                                    :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name",               :default => "(unknown)", :null => false
   end
 
   add_index "dropbox_entries", ["parent_id"], :name => "index_dropbox_entries_on_parent_id"

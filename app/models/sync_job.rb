@@ -193,6 +193,8 @@ class SyncJob < ActiveRecord::Base
       relative_path = dbox_file.path[ro_model.path.length+1..-1]
       exists_in_dropbox << relative_path
 
+      entry.name = relative_path.split('/').last
+
 	    if dbox_file.directory?
         entry.entry_type = :directory
         entry.hash = "-1"

@@ -38,17 +38,15 @@
               %td
                 = value_or_none_text(ro_annotations.modified)
             %tr
-              %td.strong
-                Contents
-              %td
-                - if ro_annotations.ore_aggregates.blank?
-                  %span.none_text
-                    nothing
-                - else
-                  %ul
-                    - ro_annotations.ore_aggregates.each do |e|
-                      %li
-                        = e.to_s
+              %td{ :colspan => 2 }
+                %p
+                  %strong Contents
+                %div.box_info
+                  - if ro.children.blank?
+                    %span.none_text
+                      nothing yet
+                  - else
+                    = build_tree_for_ro_contents(ro)
       .box_indented_with_bar
         %h3.left
           Dropbox info

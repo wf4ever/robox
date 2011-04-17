@@ -8,6 +8,7 @@ javascripts:
     - public/javascripts/jquery.easytabs.js
     - public/javascripts/core.js
     - public/javascripts/diQuery-collapsiblePanel.js
+    - public/javascripts/jquery.treeview.js
     - public/javascripts/application.js
 
 stylesheets:
@@ -18,4 +19,5 @@ stylesheets:
     - public/stylesheets/awesome-buttons.css
     - public/stylesheets/flutie_mod.css
     - public/stylesheets/diQuery-collapsiblePanel.css
+    - public/stylesheets/jquery.treeview.css
     - public/stylesheets/main.css

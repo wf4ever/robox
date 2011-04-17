@@ -3,6 +3,7 @@
 Factory.define :dropbox_entry, :default_strategy => :build do |f|
   f.association :research_object, :factory => :research_object
   f.sequence(:path) { |n| "/entry_#{n}" }
+  f.sequence(:name) { |n| "entry_#{n}" }
   f.revision 1
 end
 

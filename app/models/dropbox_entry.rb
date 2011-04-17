@@ -37,7 +37,8 @@ class DropboxEntry < ActiveRecord::Base
                   :path,
                   :parent_id,
                   :hash,
-                  :revision
+                  :revision,
+                  :name
   
   validates :research_object,
             :existence => true
@@ -58,7 +59,8 @@ class DropboxEntry < ActiveRecord::Base
   has_many :children,
            :class_name => "DropboxEntry",
            :foreign_key => "parent_id",
-           :dependent => :destroy
+           :dependent => :destroy,
+           :order => "dropbox_entries.name ASC"
              
   protected
   

@@ -587,13 +587,12 @@ form.sign_up_main {
 }
 
 .box_info {
-  background: #E9F7CC;
+  background: $content-background-color;
   color: #333333;
-  padding: 0.6em 1em;
-  margin: 0;
+  border: 1px solid #DDD;
+  padding: 0.3em 0.6em;
   margin-bottom: 1em;
-  text-align: center;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .box_info_standout {
@@ -602,7 +601,7 @@ form.sign_up_main {
   background: #FFFFCC; 
   padding: 0.3em 0.6em; 
   margin-bottom: 1em;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .box_grouped_info {
@@ -752,4 +751,16 @@ form.specify_ro_folder {
 
 .toggle_collapsibles {
   font-weight: bold;
+}
+
+.manifest {
+  color: #660000;
+}
+
+ul.ro_contents {
+
+  li {
+    line-height: 1.1;
+  }
+
 }
