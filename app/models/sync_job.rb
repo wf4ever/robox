@@ -161,10 +161,10 @@ class SyncJob < ActiveRecord::Base
     if ! version_srs
       version_srs = ro_srs.create_version("v1")
     end
-    
-    
+
     ro_model = ro_container.research_objects.find_or_create_by_name(name)
     ro_model.path = ro_metadata.path
+    ro_model.rosrs_version_uri = version_srs.uri.to_s
     ro_model.save!
 
     dropbox_session = ro_container.get_dropbox_session
@@ -175,7 +175,7 @@ class SyncJob < ActiveRecord::Base
     manifest_path = ro_metadata.path + "/"
     dropbox_session.upload(StringIO.new(manifest_content), manifest_path, :as => "manifest.rdf")
 
-    ro_model.manifest = manifest_content
+    ro_model.manifest_rdf = manifest_content
     ro_model.save!
   end
 	  

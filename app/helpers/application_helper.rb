@@ -23,5 +23,11 @@ module ApplicationHelper
     })
     return "Axialis-Round-Web2-#{options[:color].to_s.capitalize}-Png/Png/#{options[:size]}/#{name}.png"
   end
+
+  def value_or_none_text(value, none_text='none')
+    value.blank? ?
+        content_tag(:span, none_text, :class => 'none_text') :
+        value.to_s
+  end
   
 end

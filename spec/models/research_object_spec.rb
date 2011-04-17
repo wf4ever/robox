@@ -40,16 +40,24 @@ describe ResearchObject do
 
   describe "manifest" do
 
-    it "should set and read the manifest as expected" do
+    it "should set, read and update the manifest as expected" do
       ro = Factory.create(:research_object)
 
       manifest_contents = "Hellow World!"
 
-      ro.manifest = manifest_contents
+      ro.manifest_rdf = manifest_contents
       expect { ro.save! }.to_not raise_error
 
       ro_again = ResearchObject.find(ro.id)
-      ro_again.manifest.should == manifest_contents
+      ro_again.manifest_rdf.should == manifest_contents
+
+      manifest_contents_2 = manifest_contents + "\n This is Johnny..."
+
+      ro_again.manifest_rdf = manifest_contents_2
+      expect { ro_again.save! }.to_not raise_error
+
+      ro_again_2 = ResearchObject.find(ro_again.id)
+      ro_again_2.manifest_rdf.should == manifest_contents_2
     end
 
   end

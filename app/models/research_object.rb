@@ -22,7 +22,8 @@ class ResearchObject < ActiveRecord::Base
   
   attr_accessible :name,
                   :path,
-                  :dropbox_research_object_container_id
+                  :dropbox_research_object_container_id,
+                  :rosrs_version_uri
   
   validates :ro_container,
             :existence => true
@@ -43,11 +44,18 @@ class ResearchObject < ActiveRecord::Base
               :autosave => true
 
   def manifest
+    # TODO: use a better mechanism of getting the manifest object here
+    manifest_rdf.blank? ?
+        nil : 
+        DlibraClient::Version.new(nil, nil, self.rosrs_version_uri).load_rdf_graph(manifest_rdf)
+  end
+
+  def manifest_rdf
     self.content_blob.try(:content)
   end
 
-  def manifest=(content)
-    self.build_content_blob
+  def manifest_rdf=(content)
+    self.build_content_blob if self.content_blob.nil?
     self.content_blob.content = content
   end
 
