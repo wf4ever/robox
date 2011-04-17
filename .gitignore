@@ -16,5 +16,6 @@ config/settings/customised.rb
 solr/data
 config/sunspot.yml
 db/data.yml
+db/data*.yml
 config/settings/custom.yml
 vendor/bundle
