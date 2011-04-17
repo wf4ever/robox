@@ -7,6 +7,7 @@ javascripts:
     - public/javascripts/rails.js
     - public/javascripts/jquery.easytabs.js
     - public/javascripts/core.js
+    - public/javascripts/diQuery-collapsiblePanel.js
     - public/javascripts/application.js
 
 stylesheets:
@@ -16,4 +17,5 @@ stylesheets:
     - public/stylesheets/formtastic.css
     - public/stylesheets/awesome-buttons.css
     - public/stylesheets/flutie_mod.css
+    - public/stylesheets/diQuery-collapsiblePanel.css
     - public/stylesheets/main.css

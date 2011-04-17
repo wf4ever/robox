@@ -721,9 +721,35 @@ form.sign_up_main {
   }
 }
 
+/* END content tabs styles */
+
+
 form.specify_ro_folder {
-  width: 400px; 
+  width: 400px;
   margin: 0 auto;
 }
 
-/* END content tabs styles */
+.ro_container {
+  margin-bottom: 1em;
+}
+
+/* BEGIN collapsibleContainer styles */
+
+.collapsibleContainer
+{
+}
+
+.collapsibleContainerTitle div
+{
+    @extend h2;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0.3em;
+}
+
+/* END collapsibleContainer styles */
+
+
+.toggle_collapsibles {
+  font-weight: bold;
+}

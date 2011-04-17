@@ -3,3 +3,9 @@ $(document).ready(function(){ $('.tab-container').easytabs({
   tabActiveClass: "selected-tab",
   panelActiveClass: "displayed"
 }); });
+
+
+$(document).ready(function() {
+  $(".collapsibleContainer").collapsiblePanel();
+  $(".collapsibleContainerContent").slideToggle();
+});

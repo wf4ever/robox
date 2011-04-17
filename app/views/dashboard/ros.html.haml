@@ -6,57 +6,55 @@
     Go to the
     = link_to "Getting Started", root_path
     for more info
-  
-- @research_objects.each do |ro|
-  .ro_container.box_description
-    %h2
-      RO:
-      = ro.name
-    - ro_annotations = ro.manifest.try(:annotations)
-    .box_indented_with_bar
-      - if ro_annotations.nil?
-        %p
-          Manifest not currently available
-      - else
+- else
+  %p.right= toggle_collapsibles_link
+  - @research_objects.each do |ro|
+    %div{ :class => 'ro_container box_description collapsibleContainer', :title => "RO: #{ro.name}" }
+      - ro_annotations = ro.manifest.try(:annotations)
+      .box_indented_with_bar
+        - if ro_annotations.nil?
+          %p
+            Manifest not currently available
+        - else
+          %table
+            %tr
+              %td.strong
+                Title
+              %td
+                = value_or_none_text(ro_annotations.title)
+            %tr
+              %td.strong
+                Description
+              %td
+                = value_or_none_text(ro_annotations.description)
+            %tr
+              %td.strong
+                Created
+              %td
+                = value_or_none_text(ro_annotations.created)
+            %tr
+              %td.strong
+                Modified
+              %td
+                = value_or_none_text(ro_annotations.modified)
+            %tr
+              %td.strong
+                Contents
+              %td
+                - if ro_annotations.ore_aggregates.blank?
+                  %span.none_text
+                    nothing
+                - else
+                  %ul
+                    - ro_annotations.ore_aggregates.each do |e|
+                      %li
+                        = e.to_s
+      .box_indented_with_bar
+        %h3.left
+          Dropbox info
         %table
           %tr
             %td.strong
-              Title
+              Path in Dropbox
             %td
-              = value_or_none_text(ro_annotations.title)
-          %tr
-            %td.strong
-              Description
-            %td
-              = value_or_none_text(ro_annotations.description)
-          %tr
-            %td.strong
-              Created
-            %td
-              = value_or_none_text(ro_annotations.created)
-          %tr
-            %td.strong
-              Modified
-            %td
-              = value_or_none_text(ro_annotations.modified)
-          %tr
-            %td.strong
-              Contents
-            %td
-              - if ro_annotations.ore_aggregates.blank?
-                %span.none_text
-                  nothing
-              - else
-                %ul
-                  - ro_annotations.ore_aggregates.each do |e|
-                    %li
-                      = e.to_s
-    .box_indented_with_bar
-      %h3.left
-        Dropbox info
-      %table
-        %tr
-          %td.strong
-            Path in Dropbox
-          %td
-            = ro.path
+              = ro.path

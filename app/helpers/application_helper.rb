@@ -29,5 +29,12 @@ module ApplicationHelper
         content_tag(:span, none_text, :class => 'none_text') :
         value.to_s
   end
+
+  def toggle_collapsibles_link
+    link_id = "toggle_collapsibles_#{rand(10000000)}"
+    link_to_function("Expand/collapse all", nil, :id => link_id, :class => 'toggle_collapsibles') do |page|
+      page << "$('.collapsibleContainerContent').slideToggle();"
+    end
+  end
   
 end

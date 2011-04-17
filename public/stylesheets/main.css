@@ -251,11 +251,11 @@ nav ul, nav li {
   @page {
     margin: 0.5cm; }
 
-  p, h2, h3 {
+  p, h2, .collapsibleContainerTitle div, h3 {
     orphans: 3;
     widows: 3; }
 
-  h2, h3 {
+  h2, .collapsibleContainerTitle div, h3 {
     page-break-after: avoid; } }
 
 @media all and (orientation:portrait) {}
@@ -271,7 +271,7 @@ body {
   font-family: arial, helvetica, clean, sans-serif;
   -webkit-font-smoothing: antialiased; }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, .collapsibleContainerTitle div, h3, h4, h5, h6 {
   line-height: 1.5;
   text-align: center;
   color: #667b99;
@@ -281,7 +281,7 @@ h1 {
   font-size: 154%;
   margin-bottom: 0.5em; }
 
-h2 {
+h2, .collapsibleContainerTitle div {
   font-size: 124%; }
 
 h3 {
@@ -535,7 +535,7 @@ img, a img {
   background-color: #f5f5f5;
   padding-bottom: 1em; }
 
-#errorExplanation h2 {
+#errorExplanation h2, #errorExplanation .collapsibleContainerTitle div, .collapsibleContainerTitle #errorExplanation div {
   text-align: center;
   font-weight: bold;
   padding: 0.5em;
@@ -830,8 +830,20 @@ form.sign_up_main {
     -webkit-box-shadow: 1px 1px 3px #cccccc;
     box-shadow: 1px 1px 3px #cccccc; }
 
+/* END content tabs styles */
 form.specify_ro_folder {
   width: 400px;
   margin: 0 auto; }
 
-/* END content tabs styles */
+.ro_container {
+  margin-bottom: 1em; }
+
+/* BEGIN collapsibleContainer styles */
+.collapsibleContainerTitle div {
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 0.3em; }
+
+/* END collapsibleContainer styles */
+.toggle_collapsibles {
+  font-weight: bold; }
