@@ -65,7 +65,7 @@
             %td.strong
               Last Sync
             %td
-              - last_job = ro.sync_jobs.last
+              - last_job = ro.ro_container.sync_jobs.last
               - if last_job.nil?
                 .notice
                   Not synced yet
