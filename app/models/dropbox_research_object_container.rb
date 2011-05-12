@@ -86,6 +86,30 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   def initial_sync_success?
     sync_jobs.success.count > 0
   end
+
+  def submit_sync_job
+    # Only submit a job if no currently pending or running jobs are in the queue
+    unless self.current_job_exists?
+      # If there are any pending jobs that haven't run for
+      # a certain period of time, then resubmit them instead
+      # of creating a new one
+      pending_jobs = self.pending_jobs_to_resubmit
+
+      if pending_jobs.blank?
+        sync_job = self.sync_jobs.build
+        sync_job.save!
+        sync_job.delay.run
+        Util.say "Submitted new SyncJob (ID: #{sync_job.id}) for DropboxResearchObjectContainer with ID '#{self.id}'"
+      else
+        # Only resubmit the last pending job
+        sync_job = pending_jobs.first
+        sync_job.started_at, sync_job.finished_at = nil
+        sync_job.save!
+        sync_job.delay.run
+        Util.say "Resubmitted an existing SyncJob (ID: #{sync_job.id}) for DropboxResearchObjectContainer with ID '#{self.id}'"
+      end
+    end
+  end
   
   protected
   
