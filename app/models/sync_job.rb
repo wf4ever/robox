@@ -210,14 +210,15 @@ class SyncJob < ActiveRecord::Base
         end
         entry.entry_type = :file
         content = dropbox_session.download(dbox_file.path)
-        resource = version_srs[relative_path]
-        if resource
-          # update the resource
-          resource.content = content
-        else
+	# FIXME: Updating disabled due to WFE-63
+        #resource = version_srs[relative_path]
+        #if resource
+        #  # update the resource
+        #  resource.content = content
+        #else
           puts "Uploading " + relative_path
           resource = version_srs.upload_resource(relative_path, APPLICATION_OCTET_STREAM, content)
-        end
+        #end
       end
       entry.revision = dbox_file.revision
       entry.save!

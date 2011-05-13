@@ -28,7 +28,7 @@ gem 'dropbox', '~> 1.2.3'
 gem 'hashie'
 gem 'delayed_job'
 gem 'delayed_job_admin'
-gem 'dlibra_client', '~>0.0.3', :git => 'git://github.com/wf4ever/prototype1-dlibra-client-gem.git'
+gem 'dlibra_client', '~>0.1.0', :git => 'git://github.com/wf4ever/prototype1-dlibra-client-gem.git'
 gem 'ruby-hmac'
 
 gem 'dummy_dropbox', :group => :test

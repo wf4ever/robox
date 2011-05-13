@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/wf4ever/prototype1-dlibra-client-gem.git
-  revision: e07964f5ac7636eee87be30c6c9677954bdc0dcf
+  revision: 33cab05b45fb6ee0fa181cbce5907ef6285f3fd2
   specs:
-    dlibra_client (0.0.3)
+    dlibra_client (0.1.0)
       rdf (~> 0.3)
       rdf-rdfxml (~> 0.3)
 
@@ -199,11 +199,11 @@ GEM
     rake (0.8.7)
     rb-inotify (0.8.4)
       ffi (>= 0.5.0)
-    rdf (0.3.2)
-      addressable (>= 2.2)
-    rdf-rdfxml (0.3.2.1)
+    rdf (0.3.3)
+      addressable (= 2.2.4)
+    rdf-rdfxml (0.3.3.1)
       nokogiri (>= 1.4.4)
-      rdf (>= 0.3.1)
+      rdf (>= 0.3.3)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -283,7 +283,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_admin
   devise (~> 1.1.3)
-  dlibra_client (~> 0.0.3)!
+  dlibra_client (~> 0.1.0)!
   dropbox (~> 1.2.3)
   dummy_dropbox
   evergreen
