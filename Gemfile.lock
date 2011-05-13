@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/wf4ever/prototype1-dlibra-client-gem.git
   revision: 33cab05b45fb6ee0fa181cbce5907ef6285f3fd2
+  branch: 0.1
   specs:
     dlibra_client (0.1.0)
       rdf (~> 0.3)
