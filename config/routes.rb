@@ -7,7 +7,9 @@ Wf4EverDropboxConnector::Application.routes.draw do
   match 'dashboard/dropbox' => 'dashboard#dropbox'
 
   resources :dropbox_accounts do
-    resources :ro_containers, :controller => "DropboxResearchObjectContainer"
+    resources :ro_containers, :controller => "DropboxResearchObjectContainer" do
+      post 'force_sync'
+    end
   end
   
   match 'connect' => 'dropbox_accounts#connect'
