@@ -26,8 +26,27 @@
                   Owner email:
                 %td
                   = account.owner_email
+          %h3 RO Locations
+          - account.ro_containers.each do |container|
+            .box_info
+              %table
+                %tr
+                  %td.strong
+                    Path in Dropbox:
+                  %td
+                    = container.path
+                %tr
+                  %td.strong
+                    Workspace ID (for ROSRS):
+                  %td
+                    = container.workspace_id
+                %tr
+                  %td.strong
+                    Workspace Password (for ROSRS):
+                  %td
+                    = container.workspace_password
           .buttons
-            = button 'Add a location in this Dropbox that stores ROs', new_dropbox_account_ro_container_path(account)
+            = button 'Add a new location in this Dropbox that stores ROs', new_dropbox_account_ro_container_path(account)
     #sync_status
       - current_user.dropbox_accounts.each do |account|
         %h2
