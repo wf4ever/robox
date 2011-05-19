@@ -24,7 +24,14 @@ class DropboxResearchObjectContainerController < ApplicationController
     @dropbox_research_object_container = DropboxResearchObjectContainer.find(params[:ro_container_id])
     respond_to do |format|
       if params[:password] == @dropbox_research_object_container.workspace_password
-        @dropbox_research_object_container.submit_sync_job
+        #@dropbox_research_object_container.submit_sync_job
+
+        # Perform the sync immediately!
+        # NOTE: this is subject to the request timeout so
+        # will only be effective for small sets of ROs.
+        sync_job = @dropbox_research_object_container.sync_jobs.create
+        sync_job.run
+
         Util.say "Successfully forced sync for DropboxResearchObjectContainer with ID #{@dropbox_research_object_container.id}"
         format.html { head :ok }
       else
