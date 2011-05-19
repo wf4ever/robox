@@ -32,6 +32,11 @@
               %table
                 %tr
                   %td.strong
+                    ROBox ID:
+                  %td
+                    = dropbox_account_ro_container_url(account, container)
+                %tr
+                  %td.strong
                     Path in Dropbox:
                   %td
                     = container.path
