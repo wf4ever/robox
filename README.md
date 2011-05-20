@@ -26,7 +26,7 @@ Check out the *doc* directory for some diagrams
 * `bundle --deployment`
 * Set up config/database.yml
 * Set up config/settings/custom.yml
-* `rake db:setup && rake db:migrate && rake db:seed`
+* `rake db:setup`
 * `jammit`
 * `gem install passenger`
 * Set up passenger in Apache
