@@ -32,8 +32,13 @@ class DropboxResearchObjectContainerController < ApplicationController
         sync_job = @dropbox_research_object_container.sync_jobs.create
         sync_job.run
 
-        Util.say "Successfully forced sync for DropboxResearchObjectContainer with ID #{@dropbox_research_object_container.id}"
-        format.html { head :ok }
+        if sync_job.has_error?
+          Util.say "Force sync FAILED for DropboxResearchObjectContainer with ID #{@dropbox_research_object_container.id}"
+          format.html { render :text => "Sync failed:\n#{sync_job.error_message}", :status => 500 }
+        else
+          Util.say "Successfully forced sync for DropboxResearchObjectContainer with ID #{@dropbox_research_object_container.id}"
+          format.html { head :ok }
+        end
       else
         Util.say "Could not force sync for DropboxResearchObjectContainer with ID #{@dropbox_research_object_container.id} - forbidden! (probably bad password)"
         format.html { head :forbidden }

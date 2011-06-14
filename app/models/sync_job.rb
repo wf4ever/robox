@@ -73,6 +73,10 @@ class SyncJob < ActiveRecord::Base
   def finished?
     !self.finished_at.blank?
   end
+
+  def has_error?
+    !self.error_message.blank?
+  end
   
   def run
     unless started?
@@ -115,7 +119,7 @@ class SyncJob < ActiveRecord::Base
       rescue Exception => ex
         Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
         self.status = :failed
-        add_error_message "An unknown error occurred during sync. See logs for exception details."
+        add_error_message "Exception occurred: [#{ex.class.name}] #{ex.message}"
       end
       
       save!
