@@ -12,6 +12,7 @@ The following style may be *conditionally* included for improved support on olde
 form.formtastic fieldset ol li fieldset legend { margin-left: -6px;}
 
 --------------------------------------------------------------------------------------------------*/
+/* Useful with form inputs and textareas */
 body {
   font-size: 13px;
   font-family: sans-serif;
@@ -224,7 +225,7 @@ nav ul, nav li {
 
   /* Black prints faster: sanbeiji.com/archives/953 */
   a, a:visited {
-    color: #444 !important;
+    color: #444444 !important;
     text-decoration: underline; }
 
   a[href]:after {
@@ -257,10 +258,6 @@ nav ul, nav li {
 
   h2, .collapsibleContainerTitle div, h3 {
     page-break-after: avoid; } }
-
-@media all and (orientation:portrait) {}
-@media all and (orientation:landscape) {}
-@media screen and (max-device-width: 480px) {}
 html {
   background-color: #e9eef6; }
 
@@ -374,7 +371,12 @@ img, a img {
   #main_header .logo, #main_header .logo2 {
     display: -moz-inline-block;
     display: -moz-inline-box;
+    -moz-box-orient: vertical;
     display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    *display: inline;
+    *vertical-align: auto;
     vertical-align: middle;
     margin-right: 1em;
     margin-bottom: 0;
@@ -387,7 +389,12 @@ img, a img {
   #main_header .title {
     display: -moz-inline-block;
     display: -moz-inline-box;
+    -moz-box-orient: vertical;
     display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    *display: inline;
+    *vertical-align: auto;
     vertical-align: middle;
     text-align: left; }
     #main_header .title .site_title {
@@ -572,7 +579,7 @@ img, a img {
   .getting_started tr.pending {
     background-color: #EEE; }
   .getting_started td.not_available {
-    color: #999 !important; }
+    color: #999999 !important; }
   .getting_started .status_icon {
     display: block; }
 
@@ -588,13 +595,13 @@ img, a img {
   background-color: #258225 !important; }
 
 .awesome.blue {
-  background-color: #0A50FF !important; }
+  background-color: #0a50ff !important; }
 
 .awesome.red {
   background-color: #e33100 !important; }
 
 .awesome.green {
-  background-color: #3ACC00 !important; }
+  background-color: #3acc00 !important; }
 
 .awesome.small {
   padding: 4px 7px 5px !important;
