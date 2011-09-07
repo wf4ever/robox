@@ -15,5 +15,8 @@ rosrs:
   admin_username: "{{..}}"
   admin_password: "{{..}}"
 
+ums:
+  uri: "http://sandbox.wf4ever-project.org/users/"
+
 sync:
   pending_jobs_resubmit_after: 15  # In minutes
