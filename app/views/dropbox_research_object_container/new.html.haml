@@ -8,13 +8,19 @@
     For example, if you specify 
     %strong
       Work/ROs
-    as an ROs location, then
+    as an ROs location, then the folders
     %strong
-      Work/ROs/analysis1
+      Work/ROs/analysis1/
     and
     %strong
-      Work/ROs/analysis2 
-    will be treated as two different Research Objects.
+      Work/ROs/analysis2/
+    will be treated as two different Research Objects called
+    %strong
+      analysis1
+    and
+    %strong
+      analysis2
+    
   %p
     %strong
       NOTE:
@@ -26,5 +32,8 @@
   = f.error_messages
   = f.inputs do
     = f.input :path, :label => "Folder"
+    = f.input :workspace_id, :label => "dLibra username", :required => false, 
+	:hint => raw("Optional <a href='http://sandbox.wf4ever-project.org/users/'>dLibra credentials</a>")
+    = f.input :workspace_password, :label => "dLibra password", :required => false, :as => :password
     = f.buttons do
       = f.commit_button "Add" 

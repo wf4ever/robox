@@ -22,7 +22,9 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   include DatabaseValidation
   
   attr_accessible :dropbox_account_id,
-                  :path
+                  :path,
+		  :workspace_id,
+		  :workspace_password
                   
   validates :dropbox_account,
             :existence => true
@@ -38,8 +40,8 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
            :dependent => :destroy
   
   before_save :set_workspace_credentials
-  after_save :ensure_workspace_exists_in_rosrs
   after_save :ensure_folder_exists_in_dropbox
+  after_save :ensure_workspace_exists_in_rosrs
 
   def current_job_exists?
     self.sync_jobs.exists? :status_code => [ SyncJob.statuses(:pending, :running) ]
@@ -114,18 +116,22 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   protected
   
   def set_workspace_credentials
-    self[:workspace_id] = "dbox-" + Base64.urlsafe_encode64(UUIDTools::UUID.random_create().raw)[0,22]
-    self[:workspace_password] = HMAC::MD5.new(Wf4EverDropboxConnector::Application.config.secret_token + dropbox_account.dropbox_user_id.to_s + rand(1000).to_s).hexdigest
+    unless self[:workspace_id]
+      self[:workspace_id] = "dbox-" + Base64.urlsafe_encode64(UUIDTools::UUID.random_create().raw)[0,22]
+      self[:workspace_password] = HMAC::MD5.new(Wf4EverDropboxConnector::Application.config.secret_token + dropbox_account.dropbox_user_id.to_s + rand(1000).to_s).hexdigest
+    end
   end
   
   def ensure_workspace_exists_in_rosrs
     Util.say "Creating workspace '#{workspace_id}' in RO SRS...'"
-    DlibraClient::Workspace.create(
+    unless get_workspace
+      DlibraClient::Workspace.create(
         Settings.rosrs.base_uri,
         workspace_id,
         workspace_password,
         Settings.rosrs.admin_username,
         Settings.rosrs.admin_password)
+    end
   end
   
   def ensure_folder_exists_in_dropbox
