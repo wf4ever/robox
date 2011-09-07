@@ -31,9 +31,16 @@
     :html => { :class => "specify_ro_folder" } do |f|
   = f.error_messages
   = f.inputs do
-    = f.input :path, :label => "Folder"
-    = f.input :workspace_id, :label => "dLibra username", :required => false, 
-	:hint => raw("Optional <a href='http://sandbox.wf4ever-project.org/users/'>dLibra credentials</a>")
+    = f.input :path, :label => "Folder", :input_html => { :autofocus => "autofocus", :required => "required" }
+    %li
+      .box_grouped_info
+        If you already have 
+        %a{:href=>Settings.ums.uri} dLibra credentials
+        you can provide them below to reuse your existing 
+        %i dLibra workspace. 
+        If you leave these empty
+        we will create a new dLibra user for you.
+    = f.input :workspace_id, :label => "dLibra username", :required => false, :input_html => { :placeholder => "(new dLibra user)" }
     = f.input :workspace_password, :label => "dLibra password", :required => false, :as => :password
     = f.buttons do
       = f.commit_button "Add" 
