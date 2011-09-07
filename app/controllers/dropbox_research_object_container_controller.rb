@@ -6,6 +6,7 @@ class DropboxResearchObjectContainerController < ApplicationController
   load_resource :dropbox_research_object_container, :through => :dropbox_account, :except => [ :force_sync ]
   
   def new
+	@dropbox_research_object_container.path = "My ROs"
   end
 
   def create
