@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem "rails", "3.0.7"
+gem "rails", "3.0.10"
 gem "rake", "~> 0.9.2"
 gem "mysql2", '~> 0.2.13'   # Only 0.2.x works with Rails 3.0.x
 gem "sqlite3", '~> 1.3.4'
