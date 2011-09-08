@@ -78,7 +78,9 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
     # TODO: this should really check the presence of the workspace
     # and whether it is accessible or not
     begin
-      return DlibraClient::Workspace.new(Settings.rosrs.base_uri, workspace_id, workspace_password)
+      w = DlibraClient::Workspace.new(Settings.rosrs.base_uri, workspace_id, workspace_password)
+      w.research_objects
+      return w
     rescue Exception => ex
       Util.log_exception ex, :error, "Exception occurred during DropboxResearchObjectContainer#get_workspace for DropboxResearchObjectContainer with ID #{id}"
       return nil
@@ -116,7 +118,7 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   protected
   
   def set_workspace_credentials
-    unless self[:workspace_id]
+    if self[:workspace_id].blank?
       self[:workspace_id] = "dbox-" + Base64.urlsafe_encode64(UUIDTools::UUID.random_create().raw)[0,22]
       self[:workspace_password] = HMAC::MD5.new(Wf4EverDropboxConnector::Application.config.secret_token + dropbox_account.dropbox_user_id.to_s + rand(1000).to_s).hexdigest
     end
@@ -124,7 +126,7 @@ class DropboxResearchObjectContainer < ActiveRecord::Base
   
   def ensure_workspace_exists_in_rosrs
     Util.say "Creating workspace '#{workspace_id}' in RO SRS...'"
-    unless get_workspace
+    if get_workspace.blank?
       DlibraClient::Workspace.create(
         Settings.rosrs.base_uri,
         workspace_id,
