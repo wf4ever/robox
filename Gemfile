@@ -9,6 +9,7 @@ gem "jammit", '~> 0.6.0'
 gem "friendly_id", '~> 3.1.0'
 gem "will_paginate", "~> 3.0.0"
 gem "haml", "~> 3.1.2"
+gem "sass", "~> 3.1.7"
 gem "haml-rails"
 gem "yard"
 gem "bluecloth", '~> 2.1.0'
