@@ -18,6 +18,13 @@
 #  index_sync_jobs_on_dbox_ro_container_id_and_status       (dropbox_research_object_container_id,status_code)
 #
 
+require 'tempfile'
+require 'dropbox'
+
+class NotADirectoryError < Dropbox::FileError 
+  
+end
+
 class SyncJob < ActiveRecord::Base
   
   APPLICATION_OCTET_STREAM = "application/octet-stream"
@@ -104,17 +111,34 @@ class SyncJob < ActiveRecord::Base
 
         if ok
           update_status! :running
-
+          
+          synced_ros = []
+          
+          # Sync any dropbox folder
           ro_container_metadata.contents.each do |entry|
             if entry.directory?
-              sync_ro(entry, workspace)
+              ro = sync_ro(entry, workspace)
+              synced_ros << ro
             end
           end
-
+          
+          # TODO: Sync any folders only on RO side
+          workspace.each do |ro| 
+            if not synced_ros.include? ro do
+              subfolder = ro_container.get_dropbox_session.path + "/" + ro.name
+              # TODO: Check that subfolder is not an existing file - the API will make (1) instead!
+              folder = ro_container.get_dropbox_session.create_folder subfolder
+              sync_ro(folder, workspace)
+            end           
+          end
+          
+          
           # TODO: Delete ROs now missing in dropbox
 
           self.status = :success
         end
+
+      end
 
       rescue Exception => ex
         Util.log_exception ex, :error, "Exception occurred during SyncJob#run for SyncJob ID '#{id}'"
@@ -181,10 +205,25 @@ class SyncJob < ActiveRecord::Base
 
     ro_model.manifest_rdf = manifest_content
     ro_model.save!
+    return ro_srs
   end
+	
+	def make_dropbox_folders(dropbox_session, path)	  
+	  metadata = dropbox_session.metadata(path)
+	  if metadata.nil?
+	    parent = path.split("/")[0..-2].join("/")
+      make_dropbox_folders(dropbox_session, parent)
+	    # TODO: Store directory in our database?
+	    metadata = dropbox_session.create_folder(path)
+	  end
+	  if not metadata.directory?
+	    raise NotADirectoryError.new path
+	  end
+	end
+	  
 	  
 	 
-
+  # TODO: Move these kind of functions out of the model!
   def sync_ro_folder(ro_path, dropbox_session, ro_model, version_srs, parent=ro_model)
     exists_in_dropbox = []
     dropbox_session.list(ro_path).each do |dbox_file|
@@ -192,7 +231,6 @@ class SyncJob < ActiveRecord::Base
       entry = parent.children.find_or_create_by_path(dbox_file.path)
       
       entry.research_object = ro_model
-
 
       relative_path = dbox_file.path[ro_model.path.length+1..-1]
       exists_in_dropbox << relative_path
@@ -214,15 +252,14 @@ class SyncJob < ActiveRecord::Base
         end
         entry.entry_type = :file
         content = dropbox_session.download(dbox_file.path)
-	# FIXME: Updating disabled due to WFE-63
-        #resource = version_srs[relative_path]
-        #if resource
-        #  # update the resource
-        #  resource.content = content
-        #else
+        resource = version_srs[relative_path]
+        if resource
+          # update the resource
+          resource.content = content
+        else
           puts "Uploading " + relative_path
           resource = version_srs.upload_resource(relative_path, APPLICATION_OCTET_STREAM, content)
-        #end
+        end
       end
       entry.revision = dbox_file.revision
       entry.save!
@@ -245,6 +282,34 @@ class SyncJob < ActiveRecord::Base
       end
       existing_model.delete
     end
+    
+    # Sync back again anything added on ROSRS which we did not put there
+    version_srs.each do |resource| 
+      
+      dropbox_path = ro_model.path + "/" + resource.name 
+      
+      file_path = dropbox_path.sub(/(.*)\/.*/, "\\1")
+      file_name = resource.name.sub(/(.*)\//, "")
+  
+      make_dropbox_folders(dropbox_session, file_path)
+      # TODO: Stream from ROSRS? 
+
+      # Make sure we can deal with binaries
+      temp_file = Tempfile.new("robox-sync", :encoding => 'ascii-8bit')
+      begin
+        resource.download(temp_file)
+        temp_file.seek(0)
+        dropbox_session.upload(temp_file, file_path, :as => file_name)
+        puts "Uploaded to Dropbox: " + dropbox_path
+        ## TODO: Put into database
+        
+      ensure
+        temp_file.unlink
+        temp_file.close
+      end
+    end
+  
   end
 
 end
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110417211838) do
+ActiveRecord::Schema.define(:version => 20111004104200) do
 
   create_table "content_blobs", :force => true do |t|
     t.binary   "content",    :limit => 10485760, :null => false
@@ -125,10 +125,10 @@ ActiveRecord::Schema.define(:version => 20110417211838) do
   create_table "sync_jobs", :force => true do |t|
     t.datetime "started_at"
     t.datetime "finished_at"
-    t.string   "status_code",                          :null => false
+    t.string   "status_code",                                             :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "error_message"
+    t.text     "error_message",                        :limit => 1048576
     t.integer  "dropbox_research_object_container_id"
   end
 
