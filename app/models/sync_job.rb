@@ -118,14 +118,18 @@ class SyncJob < ActiveRecord::Base
           ro_container_metadata.contents.each do |entry|
             if entry.directory?
               ro = sync_ro(entry, workspace)
-              synced_ros << ro
+              synced_ros << ro.name
+              puts "Synced " + ro.name
             end
           end
           
+          puts "Checking for new ROs on ROSRS"
           # TODO: Sync any folders only on RO side
           workspace.each do |ro| 
-            if not synced_ros.include? ro do
-              subfolder = ro_container.get_dropbox_session.path + "/" + ro.name
+            puts "Checking " + ro.name
+            if not synced_ros.include? ro.name
+              subfolder = ro_container_metadata.path + "/" + ro.name
+              puts "Making " + subfolder
               # TODO: Check that subfolder is not an existing file - the API will make (1) instead!
               folder = ro_container.get_dropbox_session.create_folder subfolder
               sync_ro(folder, workspace)
@@ -136,7 +140,6 @@ class SyncJob < ActiveRecord::Base
           # TODO: Delete ROs now missing in dropbox
 
           self.status = :success
-        end
 
       end
 
@@ -187,6 +190,7 @@ class SyncJob < ActiveRecord::Base
 
     version_srs = ro_srs["v1"]
     if ! version_srs
+      puts "Version v1"
       version_srs = ro_srs.create_version("v1")
     end
 
@@ -197,6 +201,7 @@ class SyncJob < ActiveRecord::Base
 
     dropbox_session = ro_container.get_dropbox_session
 
+    puts "Syncing " + ro_model.path
     sync_ro_folder(ro_metadata.path, dropbox_session, ro_model, version_srs)
 
     manifest_content = version_srs.manifest_rdf
@@ -208,18 +213,20 @@ class SyncJob < ActiveRecord::Base
     return ro_srs
   end
 	
-	def make_dropbox_folders(dropbox_session, path)	  
-	  metadata = dropbox_session.metadata(path)
-	  if metadata.nil?
-	    parent = path.split("/")[0..-2].join("/")
+  def make_dropbox_folders(dropbox_session, path)	  
+    begin
+      metadata = dropbox_session.metadata(path)
+    rescue Dropbox::FileNotFoundError
+      parent = path.split("/")[0..-2].join("/")
       make_dropbox_folders(dropbox_session, parent)
-	    # TODO: Store directory in our database?
-	    metadata = dropbox_session.create_folder(path)
-	  end
-	  if not metadata.directory?
-	    raise NotADirectoryError.new path
-	  end
-	end
+      metadata = dropbox_session.create_folder(path)
+      # TODO: Store directory in our database?
+    end
+    if not metadata.directory?
+      raise NotADirectoryError.new path
+    end
+    return metadata
+  end
 	  
 	  
 	 
@@ -237,12 +244,12 @@ class SyncJob < ActiveRecord::Base
 
       entry.name = relative_path.split('/').last
 
-	    if dbox_file.directory?
+	  if dbox_file.directory?
         entry.entry_type = :directory
         entry.hash = "-1"
         entry.revision = "-1"
         entry.save!
-	      sync_ro_folder(dbox_file.path, dropbox_session, ro_model, version_srs, entry)
+	    sync_ro_folder(dbox_file.path, dropbox_session, ro_model, version_srs, entry)
         entry.hash = dbox_file.hash
       elsif relative_path == "manifest.rdf"
         entry.entry_type = :manifest
@@ -277,36 +284,57 @@ class SyncJob < ActiveRecord::Base
 
       resource = version_srs[relative_path]
       if resource
-        puts "Deleting " + relative_path
-        resource.delete!
+        puts "(Should have been) deleting " + relative_path
+        # FIXME: This sometimes wants to delete manifest.rdf -> disabled
+        #resource.delete!
       end
-      existing_model.delete
+      #existing_model.delete
     end
     
     # Sync back again anything added on ROSRS which we did not put there
     version_srs.each do |resource| 
+      if exists_in_dropbox.include?(relative_path)
+        puts "Not uploading " + relative_path
+        next
+      end
       
       dropbox_path = ro_model.path + "/" + resource.name 
+      is_folder = resource.name.ends_with? "/"
       
       file_path = dropbox_path.sub(/(.*)\/.*/, "\\1")
-      file_name = resource.name.sub(/(.*)\//, "")
+      file_name = resource.name.split("/")[-1]
   
       make_dropbox_folders(dropbox_session, file_path)
       # TODO: Stream from ROSRS? 
 
-      # Make sure we can deal with binaries
-      temp_file = Tempfile.new("robox-sync", :encoding => 'ascii-8bit')
-      begin
-        resource.download(temp_file)
-        temp_file.seek(0)
-        dropbox_session.upload(temp_file, file_path, :as => file_name)
-        puts "Uploaded to Dropbox: " + dropbox_path
-        ## TODO: Put into database
-        
-      ensure
-        temp_file.unlink
-        temp_file.close
+      if not is_folder
+        # Make sure we can deal with binaries
+        temp_file = Tempfile.new("robox-sync", :encoding => 'ascii-8bit')
+        begin
+          resource.download(temp_file)
+          temp_file.seek(0)
+          dropbox_session.upload(temp_file, file_path, :as => file_name)
+          dbox_file = dropbox_session.metadata(dropbox_path)
+          puts "Uploaded to Dropbox: " + dropbox_path
+        ensure
+          temp_file.unlink
+          temp_file.close
+        end
       end
+      ## Put into database
+      entry = parent.children.find_or_create_by_path(dropbox_path)
+      entry.research_object = ro_model
+      entry.name = file_name
+      entry.entry_type = :file
+      if is_folder
+        puts "Added folder " + dropbox_path
+        entry.entry_type = :directory
+        entry.revision = -1
+        entry.hash = -1
+      else
+        entry.revision = dbox_file.revision
+      end
+      entry.save!
     end
   
   end
